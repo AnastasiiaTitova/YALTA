@@ -1,4 +1,4 @@
-package com.example.yalta.activities
+package com.yalta.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,10 +9,10 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import com.example.yalta.services.HardcodedLocalRepo
-import com.example.yalta.services.LoginService
-import com.example.yalta.R
-import com.example.yalta.services.SessionService
+import com.yalta.services.HardcodedLocalRepo
+import com.yalta.services.LoginService
+import com.yalta.R
+import com.yalta.services.SessionService
 
 class LoginActivity : AppCompatActivity() {
 

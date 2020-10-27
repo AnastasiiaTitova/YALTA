@@ -1,12 +1,12 @@
-package com.example.yalta.activities
+package com.yalta.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import com.example.yalta.R
-import com.example.yalta.services.SessionService
+import com.yalta.R
+import com.yalta.services.SessionService
 
 class LoggedInActivity : AppCompatActivity() {
 

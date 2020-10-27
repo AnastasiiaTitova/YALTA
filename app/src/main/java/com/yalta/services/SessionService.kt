@@ -1,4 +1,4 @@
-package com.example.yalta.services
+package com.yalta.services
 
 object SessionService {
     var session: Session? = null

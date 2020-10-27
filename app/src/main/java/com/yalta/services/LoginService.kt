@@ -1,4 +1,4 @@
-package com.example.yalta.services
+package com.yalta.services
 
 sealed class LoginResponse
 class SuccessfulLogin(val token: String) : LoginResponse()
