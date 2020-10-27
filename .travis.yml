@@ -2,21 +2,18 @@ language: android
 
 jdk: oraclejdk11
 
-before_install:
-  - yes | sdkmanager "platforms;android-30"
-  - yes | sdkmanager "build-tools;30.0.2"
-
 android:
   components:
     - tools
     - platform-tools
     - tools
-    - build-tools-30.0.2
-    - android-30
+  licenses:
+    - 'android-sdk-preview-license-.+'
+    - 'android-sdk-license-.+'
 
-licenses:
-  - android-sdk-preview-license-.+
-  - android-sdk-license-.+
+before_install:
+  - yes | sdkmanager "platforms;android-30"
+  - yes | sdkmanager "build-tools;30.0.2"
 
 before_script:
   - chmod +x gradlew
