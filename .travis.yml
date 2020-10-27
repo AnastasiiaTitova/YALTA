@@ -3,6 +3,9 @@ language: android
 jdk:
   - oraclejdk11
 
+before_install:
+  - echo yes | sdkmanager "build-tools-30.0.2"
+
 android:
   components:
     - tools
