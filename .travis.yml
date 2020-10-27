@@ -7,9 +7,6 @@ android:
     - tools
     - platform-tools
     - tools
-  licenses:
-    - 'android-sdk-preview-license-.+'
-    - 'android-sdk-license-.+'
 
 before_install:
   - yes | sdkmanager "platforms;android-30"
