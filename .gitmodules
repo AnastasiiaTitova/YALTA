@@ -1,0 +1,3 @@
+[submodule "app/src/main/java/com/common"]
+	path = app/src/main/java/com/common
+	url = https://github.com/maiksaray/YALTA-common.git
