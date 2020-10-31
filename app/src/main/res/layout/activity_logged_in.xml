@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="290dp"
         android:layout_height="120dp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@android:color/holo_red_light"
         android:text="@string/you_have_successfully_logged_in"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="210dp"

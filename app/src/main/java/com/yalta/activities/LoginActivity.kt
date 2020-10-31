@@ -71,15 +71,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun EditText.onFocusChange(another: EditText, error: TextView) {
         if (hasWindowFocus()) {
-            setBackgroundResource(android.R.drawable.edit_text)
-            another.setBackgroundColor(android.R.drawable.edit_text)
+            setBackgroundResource(android.R.color.background_dark)
+            another.setBackgroundResource(android.R.color.background_dark)
             error.visibility = View.INVISIBLE
         }
     }
 
     private fun showError(user: EditText, password: EditText, error: TextView) {
-        user.setBackgroundResource(R.color.colorAccent)
-        password.setBackgroundResource(R.color.colorAccent)
+        user.setBackgroundResource(android.R.color.holo_red_light)
+        password.setBackgroundResource(android.R.color.holo_red_light)
         error.visibility = View.VISIBLE
     }
 
