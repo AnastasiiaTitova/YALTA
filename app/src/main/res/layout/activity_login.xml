@@ -11,42 +11,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="100dp"
         android:textSize="20pt"
-        android:maxLines="1" />
+        android:maxLines="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/username"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:inputType="text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         android:hint="@string/username"
         android:importantForAutofill="no"
         android:maxLines="1"
         android:imeOptions="actionNext"
         app:layout_constraintTop_toBottomOf="@+id/login"
         android:layout_marginTop="100dp"
-        android:defaultFocusHighlightEnabled="false" />
+        android:defaultFocusHighlightEnabled="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:hint="@string/password"
-        app:layout_constraintTop_toBottomOf="@+id/username"
         android:layout_marginTop="25dp"
         android:importantForAutofill="no"
         android:imeOptions="actionDone"
-        android:defaultFocusHighlightEnabled="false" />
+        android:defaultFocusHighlightEnabled="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username" />
 
     <Button
         android:id="@+id/goButton"
