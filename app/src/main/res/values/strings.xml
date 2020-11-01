@@ -7,4 +7,7 @@
     <string name="incorrect_username_or_password">Incorrect username or password</string>
     <string name="you_have_successfully_logged_in">You have successfully logged in</string>
     <string name="logout">Logout</string>
+    <string name="map">Map</string>
+    <string name="profile">Profile</string>
+    <string name="browse">Browse</string>
 </resources>
