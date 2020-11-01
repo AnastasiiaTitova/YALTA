@@ -2,6 +2,7 @@ package com.yalta.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yalta.R
 import com.yalta.activities.fragments.BrowseFragment
@@ -17,17 +18,14 @@ class MainActivity : AppCompatActivity() {
         val navigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
         navigation.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.map -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.container, MapFragment()).commit()
-                }
-                R.id.profile -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.container, ProfileFragment()).commit()
-                }
-                R.id.browse -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.container, BrowseFragment()).commit()
-                }
+            val fragment: Fragment =
+                when (it.itemId) {
+                    R.id.browse -> BrowseFragment()
+                    R.id.map -> MapFragment()
+                    R.id.profile -> ProfileFragment()
+                    else -> TODO()      // idk, we can't be here
             }
+            supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
             true
         }
         navigation.selectedItemId = R.id.browse
