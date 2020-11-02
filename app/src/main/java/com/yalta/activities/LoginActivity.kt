@@ -84,5 +84,5 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun successfulLogin() =
-        startActivity(Intent(this@LoginActivity, LoggedInActivity::class.java))
+        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
 }
