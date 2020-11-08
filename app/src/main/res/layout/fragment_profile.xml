@@ -1,25 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.fragments.ProfileFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="name"
+            type="String" />
+        <variable
+            name="role"
+            type="String" />
+    </data>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/profile"
-        android:textSize="30dp"
-        android:layout_centerInParent="true"
-        android:id="@+id/profile" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activities.fragments.ProfileFragment">
 
-    <Button
-        android:id="@+id/logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profile"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/logout" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{`Username: ` + name}"
+            android:textSize="20sp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="200dp"
+            android:id="@+id/userNameField" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{`Role: ` + role}"
+            android:textSize="20sp"
+            android:layout_below="@+id/userNameField"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="50dp"
+            android:id="@+id/userRoleField" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/changeValue"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userRoleField"
+            android:layout_marginTop="70dp"
+            android:layout_marginStart="50dp"
+            android:text="@string/change_value" />
+
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userRoleField"
+            android:layout_marginTop="70dp"
+            android:layout_alignStart="@id/changeValue"
+            android:layout_marginStart="170dp"
+            android:text="@string/logout" />
+
+    </RelativeLayout>
+</layout>
