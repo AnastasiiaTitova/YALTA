@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
-            name="name"
-            type="String" />
-        <variable
-            name="role"
-            type="String" />
+            name="viewModel"
+            type="com.yalta.viewmodel.ProfileViewModel" />
     </data>
 
     <RelativeLayout
@@ -18,15 +17,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{`Username: ` + name}"
+            android:text="@{`Username: ` + viewModel.userName}"
             android:textSize="20sp"
             android:layout_marginStart="50dp"
             android:layout_marginTop="200dp"
             android:id="@+id/userNameField" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{`Role: ` + role}"
+            android:text="@{`Role: ` + viewModel.role}"
             android:textSize="20sp"
             android:layout_below="@+id/userNameField"
             android:layout_marginTop="20dp"
@@ -40,7 +40,8 @@
             android:layout_below="@+id/userRoleField"
             android:layout_marginTop="70dp"
             android:layout_marginStart="50dp"
-            android:text="@string/change_value" />
+            android:text="@string/change_value"
+            android:onClick="@{() -> viewModel.changeValue()}" />
 
         <Button
             android:id="@+id/logout"
