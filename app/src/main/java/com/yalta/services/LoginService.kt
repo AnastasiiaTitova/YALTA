@@ -1,11 +1,11 @@
 package com.yalta.services
 
-sealed class LoginResponse
-class SuccessfulLogin(val token: String) : LoginResponse()
-class LoginFailed : LoginResponse()
+import com.yalta.repositories.LoginFailed
+import com.yalta.repositories.LoginRepo
+import com.yalta.repositories.SuccessfulLogin
 
-class LoginService(private val repo: LoginRepo, private val session: SessionService) {
-    fun login(login: String, password: String): Boolean {
+class LoginService(private val repo: LoginRepo) {
+    suspend fun login(login: String, password: String): Boolean {
         return when (val res = repo.login(login, password)) {
             is SuccessfulLogin -> {
                 SessionService.setSession(res.token)
@@ -16,18 +16,5 @@ class LoginService(private val repo: LoginRepo, private val session: SessionServ
                 false
             }
         }
-    }
-}
-
-interface LoginRepo {
-    fun login(login: String, password: String): LoginResponse
-}
-
-class HardcodedLocalRepo : LoginRepo {
-    override fun login(login: String, password: String): LoginResponse {
-        return if (login == "root" && password == "root")
-            SuccessfulLogin("hardcodedtoken")
-        else
-            LoginFailed()
     }
 }

@@ -9,10 +9,12 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import com.yalta.services.HardcodedLocalRepo
-import com.yalta.services.LoginService
+import androidx.lifecycle.lifecycleScope
 import com.yalta.R
-import com.yalta.services.SessionService
+import com.yalta.repositories.RealLoginRepo
+import com.yalta.services.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,10 +30,7 @@ class LoginActivity : AppCompatActivity() {
         val password: EditText = findViewById(R.id.password)
         val button: Button = findViewById(R.id.goButton)
         val error: TextView = findViewById(R.id.errorText)
-        val loginService = LoginService(
-            HardcodedLocalRepo(),
-            SessionService
-        )
+        val loginService = LoginService(RealLoginRepo())
 
         user.setOnFocusChangeListener { _, _ -> user.onFocusChange(password, error) }
         password.setOnFocusChangeListener { _, _ -> password.onFocusChange(user, error) }
@@ -48,11 +47,16 @@ class LoginActivity : AppCompatActivity() {
 
         password.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (loginService.login(user.text.toString(), password.text.toString())) {
-                    successfulLogin()
-                } else {
-                    button.requestFocus()
-                    button.performClick()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val loggedIn = loginService.login(user.text.toString(), password.text.toString())
+                    if (loggedIn) {
+                        this@LoginActivity.runOnUiThread { successfulLogin() }
+                    } else {
+                        this@LoginActivity.runOnUiThread {
+                            button.requestFocus()
+                            button.performClick()
+                        }
+                    }
                 }
                 true
             } else {
@@ -61,10 +65,13 @@ class LoginActivity : AppCompatActivity() {
         }
 
         button.setOnClickListener {
-            if (loginService.login(user.text.toString(), password.text.toString())) {
-                successfulLogin()
-            } else {
-                showError(user, password, error)
+            lifecycleScope.launch(Dispatchers.IO) {
+                val loggedIn = loginService.login(user.text.toString(), password.text.toString())
+                if (loggedIn) {
+                    this@LoginActivity.runOnUiThread { successfulLogin() }
+                } else {
+                    this@LoginActivity.runOnUiThread { showError(user, password, error) }
+                }
             }
         }
     }
