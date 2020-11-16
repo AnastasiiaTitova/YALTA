@@ -47,17 +47,8 @@ class LoginActivity : AppCompatActivity() {
 
         password.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val loggedIn = loginService.login(user.text.toString(), password.text.toString())
-                    if (loggedIn) {
-                        this@LoginActivity.runOnUiThread { successfulLogin() }
-                    } else {
-                        this@LoginActivity.runOnUiThread {
-                            button.requestFocus()
-                            button.performClick()
-                        }
-                    }
-                }
+                button.requestFocus()
+                button.performClick()
                 true
             } else {
                 false
