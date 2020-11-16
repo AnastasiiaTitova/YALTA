@@ -5,21 +5,29 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.yalta.CoroutineTestRule
+import com.yalta.repositories.FakeUserRepo
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 
+@ExperimentalCoroutinesApi
 class ProfileViewModelTest {
     private lateinit var viewModel: ProfileViewModel
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @get:Rule
+    var coroutinesTestRule = CoroutineTestRule()
+
     @Before
     fun setup() {
-        viewModel = ProfileViewModel()
+        viewModel = ProfileViewModel(FakeUserRepo(), coroutinesTestRule.testDispatcher)
     }
 
     private fun ensureDefaults() {
-        assertEquals(viewModel.userName.value, "root")
-        assertEquals(viewModel.role.value, "driver")
+        assertEquals("root", viewModel.userName.value)
+        assertEquals("driver", viewModel.role.value)
     }
 
     @Test
@@ -28,15 +36,15 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun changeValueOnce() {
+    fun changeValueOnce() = coroutinesTestRule.testDispatcher.runBlockingTest {
         ensureDefaults()
         viewModel.changeValue()
-        assertEquals(viewModel.userName.value, "root")
-        assertEquals(viewModel.role.value, "admin")
+        assertEquals("root", viewModel.userName.value)
+        assertEquals("admin", viewModel.role.value)
     }
 
     @Test
-    fun changeValueTwice() {
+    fun changeValueTwice() = coroutinesTestRule.testDispatcher.runBlockingTest {
         ensureDefaults()
         viewModel.changeValue()
         viewModel.changeValue()
