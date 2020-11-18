@@ -104,13 +104,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun getLocationPermission() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED
+        if ((ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED)
+            &&
+            (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED)
         ) {
             locationPermissionGranted = true
         } else {
             ActivityCompat.requestPermissions(
-                requireActivity().parent, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                activity!!,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
                 1
             )
         }
@@ -121,7 +125,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION
+                permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
+                grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                permissions[1] == Manifest.permission.ACCESS_COARSE_LOCATION
             ) {
                 locationPermissionGranted = true
             }
