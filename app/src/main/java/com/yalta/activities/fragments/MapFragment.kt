@@ -4,26 +4,27 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 
 import com.yalta.R
+import com.yalta.databinding.FragmentMapBinding
+import com.yalta.viewmodel.MapViewModel
 
 class MapFragment : Fragment(), OnMapReadyCallback {
+    private val viewModel by lazy { ViewModelProvider(this).get(MapViewModel::class.java) }
     private lateinit var mapView: MapView
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    private var location: Location? = null
     private val defaultZoom = 16.0F
-    private var lastKnownLocation: Location? = null
     private var map: GoogleMap? = null
     private var locationPermissionGranted = false
 
@@ -34,11 +35,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
+        val binding: FragmentMapBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
+
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+        binding.viewModel?.currentLocation?.observe(viewLifecycleOwner, { location ->
+            this.location = location
+            mapView.getMapAsync(this)
+        })
+
         mapView = view.findViewById(R.id.map)
         mapView.onCreate(savedInstanceState)
         mapView.onResume()
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         mapView.getMapAsync(this)
 
         return view
@@ -72,50 +82,25 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         getLocationPermission()
-        updateLocation()
-        getDeviceLocation()
-    }
-
-    private fun updateLocation() {
-        if (map == null) {
+        if (locationPermissionGranted) {
+            map?.uiSettings?.isMyLocationButtonEnabled = true
+            map?.isMyLocationEnabled = true
+        }
+        else {
+            map?.uiSettings?.isMyLocationButtonEnabled = false
+            map?.isMyLocationEnabled = false
             return
         }
-        try {
-            if (locationPermissionGranted) {
-                map?.isMyLocationEnabled = true
-                map?.uiSettings?.isMyLocationButtonEnabled = true
-            } else {
-                map?.isMyLocationEnabled = false
-                map?.uiSettings?.isMyLocationButtonEnabled = false
-                lastKnownLocation = null
-                getLocationPermission()
-            }
-        } catch (e: SecurityException) {
-            Log.e("SecurityException", "This should not happen")
+        if (location != null) {
+            map?.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(
+                        location!!.latitude,
+                        location!!.longitude
+                    ), defaultZoom
+                )
+            )
         }
-    }
-
-    private fun getDeviceLocation() = try {
-        val locationResult = fusedLocationProviderClient.lastLocation
-        locationResult.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                lastKnownLocation = task.result
-                if (lastKnownLocation != null) {
-                    map?.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(
-                                lastKnownLocation!!.latitude,
-                                lastKnownLocation!!.longitude
-                            ), defaultZoom
-                        )
-                    )
-                }
-            } else {
-                Log.w("Location", "For some NOT security reason was not able to update location")
-            }
-        }
-    } catch (e: SecurityException) {
-        Log.e("SecurityException", "This should not happen")
     }
 
     private fun getLocationPermission() {
@@ -141,6 +126,5 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 locationPermissionGranted = true
             }
         }
-        updateLocation()
     }
 }
