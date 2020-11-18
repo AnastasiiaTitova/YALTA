@@ -22,7 +22,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mapView: MapView
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-    private val defaultLocation = LatLng(59.9571, 30.3082)
     private val defaultZoom = 16.0F
     private var lastKnownLocation: Location? = null
     private var map: GoogleMap? = null
@@ -112,11 +111,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     )
                 }
             } else {
-                map?.moveCamera(
-                    CameraUpdateFactory
-                        .newLatLngZoom(defaultLocation, defaultZoom)
-                )
-                map?.uiSettings?.isMyLocationButtonEnabled = false
+                Log.w("Location", "For some NOT security reason was not able to update location")
             }
         }
     } catch (e: SecurityException) {
@@ -140,7 +135,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         locationPermissionGranted = false
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED
+                grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION
             ) {
                 locationPermissionGranted = true
             }
