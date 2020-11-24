@@ -1,6 +1,7 @@
 package com.yalta.activities.fragments
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -26,8 +27,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private var location: Location? = null
     private val defaultZoom = 16.0F
     private var map: GoogleMap? = null
-    private var locationPermissionGranted = false
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,16 +80,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        getLocationPermission()
-        if (locationPermissionGranted) {
-            map?.uiSettings?.isMyLocationButtonEnabled = true
-            map?.isMyLocationEnabled = true
+        if (grantedLocationPermission()) {
+            viewModel.locationPermissionsGranted.value = true
+            setLocationButtonEnabled(true)
+            maybeMoveCamera()
+        } else {
+            viewModel.locationPermissionsGranted.value = false
+            setLocationButtonEnabled(false)
+            requestPermissions()
         }
-        else {
-            map?.uiSettings?.isMyLocationButtonEnabled = false
-            map?.isMyLocationEnabled = false
-            return
-        }
+    }
+
+    private fun maybeMoveCamera() {
         if (location != null) {
             map?.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
@@ -103,25 +104,28 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun getLocationPermission() {
-        if ((ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED)
-            &&
-            (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED)
-        ) {
-            locationPermissionGranted = true
-        } else {
-            ActivityCompat.requestPermissions(
-                activity!!,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-                1
-            )
-        }
+    @SuppressLint("MissingPermission")
+    private fun setLocationButtonEnabled(state: Boolean) {
+        map?.uiSettings?.isMyLocationButtonEnabled = state
+        map?.isMyLocationEnabled = state
+    }
+
+    private fun grantedLocationPermission(): Boolean {
+        return (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) &&
+                (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED)
+    }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+            1
+        )
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        locationPermissionGranted = false
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED &&
@@ -129,8 +133,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 grantResults[1] == PackageManager.PERMISSION_GRANTED &&
                 permissions[1] == Manifest.permission.ACCESS_COARSE_LOCATION
             ) {
-                locationPermissionGranted = true
+                viewModel.locationPermissionsGranted.value = true
+                setLocationButtonEnabled(true)
+                maybeMoveCamera()
             }
+        } else {
+            viewModel.locationPermissionsGranted.value = false
+            setLocationButtonEnabled(false)
         }
     }
 }

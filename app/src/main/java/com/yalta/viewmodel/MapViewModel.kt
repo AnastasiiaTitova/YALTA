@@ -19,6 +19,7 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _currentLocation = MutableLiveData<Location>()
     val currentLocation: LiveData<Location> = _currentLocation
+    val locationPermissionsGranted = MutableLiveData<Boolean>()
 
     init {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
@@ -38,11 +39,23 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
         }
-        subscribe()
+
+        locationPermissionsGranted.observeForever { value: Boolean ->
+            if (value) {
+                subscribe()
+            } else {
+                unsubscribe()
+            }
+        }
     }
 
     @SuppressLint("MissingPermission")
     private fun subscribe() {
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun unsubscribe() {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 }
