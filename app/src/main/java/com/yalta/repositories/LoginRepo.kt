@@ -12,15 +12,6 @@ interface LoginRepo {
     suspend fun login(login: String, password: String): LoginResponse
 }
 
-class FakeLoginRepo : LoginRepo {
-    override suspend fun login(login: String, password: String): LoginResponse {
-        return if (login == "root" && password == "root")
-            SuccessfulLogin("token")
-        else
-            LoginFailed()
-    }
-}
-
 class RealLoginRepo : LoginRepo, RealRepo() {
     override suspend fun login(login: String, password: String): LoginResponse {
         val url = "${baseUrl}/login?username=$login&password=$password"

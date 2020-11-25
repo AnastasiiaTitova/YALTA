@@ -13,15 +13,20 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 
 import com.yalta.R
 import com.yalta.databinding.FragmentMapBinding
 import com.yalta.viewmodel.MapViewModel
+import com.yalta.viewmodel.MapViewModelFactory
+
 
 class MapFragment : Fragment(), OnMapReadyCallback {
-    private val viewModel by lazy { ViewModelProvider(this).get(MapViewModel::class.java) }
+    private lateinit var viewModel: MapViewModel
     private lateinit var mapView: MapView
 
     private var location: Location? = null
@@ -36,6 +41,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val binding: FragmentMapBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
+
+        viewModel =
+            ViewModelProvider(
+                this,
+                MapViewModelFactory(application = activity?.application!!)
+            ).get(MapViewModel::class.java)
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
