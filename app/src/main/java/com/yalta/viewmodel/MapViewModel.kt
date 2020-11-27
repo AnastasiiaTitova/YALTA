@@ -73,12 +73,3 @@ class MapViewModel(
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 }
-
-class MapViewModelFactory(
-    private val application: Application
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return MapViewModel(application) as T
-    }
-}

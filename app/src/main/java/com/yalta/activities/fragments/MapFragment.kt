@@ -45,7 +45,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         viewModel =
             ViewModelProvider(
                 this,
-                MapViewModelFactory(application = activity?.application!!)
+                MapViewModelFactory(requireActivity().application)
             ).get(MapViewModel::class.java)
 
         binding.lifecycleOwner = this
