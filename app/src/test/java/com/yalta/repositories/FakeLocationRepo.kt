@@ -6,7 +6,7 @@ import java.sql.Timestamp
 class FakeLocationRepo : LocationRepo {
     private var locations: MutableList<Pair<Double, Double>> = mutableListOf()
 
-    override suspend fun sendCurrentLocation(location: Location): LocationResponse {
+    override suspend fun sendCurrentLocation(location: Location): RepoResponse {
         locations.add(Pair(location.latitude, location.longitude))
         return AddedLocation(
             common.Location(

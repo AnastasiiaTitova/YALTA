@@ -5,16 +5,14 @@ import com.yalta.services.SessionService
 import common.LocationUpdate
 import okhttp3.*
 
-sealed class LocationResponse
-class AddedLocation(val location: common.Location) : LocationResponse()
-class FailedLocation : LocationResponse()
+class AddedLocation(val location: common.Location) : SuccessfulResponse()
 
 interface LocationRepo {
-    suspend fun sendCurrentLocation(location: Location): LocationResponse
+    suspend fun sendCurrentLocation(location: Location): RepoResponse
 }
 
 class RealLocationRepo : LocationRepo, RealRepo() {
-    override suspend fun sendCurrentLocation(location: Location): LocationResponse {
+    override suspend fun sendCurrentLocation(location: Location): RepoResponse {
         val url = "${baseUrl}/location/"
         val client = OkHttpClient()
         val json = common.Serialization.toJson(LocationUpdate(location.latitude, location.longitude))
@@ -30,7 +28,7 @@ class RealLocationRepo : LocationRepo, RealRepo() {
         return if (response.code() == 200) {
             AddedLocation(common.Serialization.fromJson(response.body()?.string()!!, common.Location::class.java))
         } else {
-            FailedLocation()
+            FailedResponse()
         }
     }
 }

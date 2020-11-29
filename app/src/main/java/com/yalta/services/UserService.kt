@@ -1,16 +1,17 @@
 package com.yalta.services
 
 import com.yalta.repositories.GotUser
-import com.yalta.repositories.NoUser
 import com.yalta.repositories.UserRepo
+import com.yalta.repositories.process
 import common.User
 
 class UserService(private val repo: UserRepo) {
     suspend fun getUser(id: Long = 1): User? {
-        return when (val res = repo.getUser(id)) {
-            is NoUser -> null
-            is GotUser -> res.user
-        }
+        return process<GotUser, User?>(
+            { repo.getUser(id) },
+            { it.user },
+            { null }
+        )
     }
 
     suspend fun changeUser(id: Long): User? {
