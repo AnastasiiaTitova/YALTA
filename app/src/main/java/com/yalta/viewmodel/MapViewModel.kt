@@ -5,13 +5,22 @@ import android.app.Application
 import android.content.Context
 import android.location.Location
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.google.android.gms.location.*
+import com.yalta.repositories.LocationRepo
+import com.yalta.repositories.RealLocationRepo
+import com.yalta.services.LocationService
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
-class MapViewModel(application: Application) : AndroidViewModel(application) {
+
+class MapViewModel(
+    application: Application,
+    repo: LocationRepo = RealLocationRepo(),
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : AndroidViewModel(application) {
     private var context: Context = getApplication<Application>().applicationContext
     private var fusedLocationProviderClient: FusedLocationProviderClient
     private var locationRequest: LocationRequest
@@ -20,6 +29,8 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
     private val _currentLocation = MutableLiveData<Location>()
     val currentLocation: LiveData<Location> = _currentLocation
     val locationPermissionsGranted = MutableLiveData<Boolean>()
+
+    private val _locationService = LocationService(repo)
 
     init {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
@@ -36,6 +47,9 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
 
                 if (locationResult?.lastLocation != null) {
                     _currentLocation.value = locationResult.lastLocation
+                    viewModelScope.launch(dispatcher) {
+                        _locationService.sendCurrentLocation(locationResult.lastLocation)
+                    }
                 }
             }
         }
