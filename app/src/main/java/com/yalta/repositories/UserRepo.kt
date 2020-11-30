@@ -5,15 +5,15 @@ import common.User
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-class GotUser(val user: User) : SuccessfulResponse()
+class GotUser(val user: User) : SuccessfulResponse<GotUser>()
 
 interface UserRepo {
-    suspend fun getUser(id: Long): RepoResponse
+    suspend fun getUser(id: Long): RepoResponse<GotUser>
     suspend fun changeUser(id: Long): User?
 }
 
 class RealUserRepo : UserRepo, RealRepo() {
-    override suspend fun getUser(id: Long): RepoResponse {
+    override suspend fun getUser(id: Long): RepoResponse<GotUser> {
         val url = "${baseUrl}/whoami"
         val client = OkHttpClient()
         val request = Request.Builder()
