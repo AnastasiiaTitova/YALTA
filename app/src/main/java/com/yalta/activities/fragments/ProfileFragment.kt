@@ -24,13 +24,14 @@ class ProfileFragment : Fragment() {
         val binding: FragmentProfileBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
 
-        binding.logout.setOnClickListener {
-            SessionService.discardSession()
-            startActivity(Intent(activity, LoginActivity::class.java))
-        }
-
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+
+        binding.viewModel?.loggedOut?.observe(viewLifecycleOwner, { loggedOut ->
+            if (loggedOut) {
+                startActivity(Intent(activity, LoginActivity::class.java))
+            }
+        })
 
         return binding.root
     }
