@@ -4,16 +4,14 @@ import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-sealed class LoginResponse
-class SuccessfulLogin(val token: String) : LoginResponse()
-class LoginFailed : LoginResponse()
+class SuccessfulLogin(val token: String) : SuccessfulResponse<SuccessfulLogin>()
 
 interface LoginRepo {
-    suspend fun login(login: String, password: String): LoginResponse
+    suspend fun login(login: String, password: String): RepoResponse<SuccessfulLogin>
 }
 
 class RealLoginRepo : LoginRepo, RealRepo() {
-    override suspend fun login(login: String, password: String): LoginResponse {
+    override suspend fun login(login: String, password: String): RepoResponse<SuccessfulLogin> {
         val url = "${baseUrl}/login?username=$login&password=$password"
 
         val client = OkHttpClient()
@@ -34,7 +32,7 @@ class RealLoginRepo : LoginRepo, RealRepo() {
                     .substringBefore(';')
             )
         } else {
-            LoginFailed()
+            FailedResponse()
         }
     }
 }
