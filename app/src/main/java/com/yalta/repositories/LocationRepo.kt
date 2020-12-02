@@ -25,10 +25,8 @@ class RealLocationRepo : LocationRepo, RealRepo() {
 
         val response = client.newCall(request).execute()
 
-        return if (response.code() == 200) {
-            AddedLocation(common.Serialization.fromJson(response.body()?.string()!!, common.Location::class.java))
-        } else {
-            FailedResponse()
+        return response.getRepoResponse { res ->
+            AddedLocation(common.Serialization.fromJson(res.body()?.string()!!, common.Location::class.java))
         }
     }
 }

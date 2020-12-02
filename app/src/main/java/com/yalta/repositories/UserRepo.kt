@@ -22,10 +22,8 @@ class RealUserRepo : UserRepo, RealRepo() {
             .build()
         val response = client.newCall(request).execute()
 
-        return if (response.code() == 200) {
-            GotUser(common.Serialization.fromJson(response.body()?.string()!!, User::class.java))
-        } else {
-            FailedResponse()
+        return response.getRepoResponse { res ->
+            GotUser(common.Serialization.fromJson(res.body()?.string()!!, User::class.java))
         }
     }
 

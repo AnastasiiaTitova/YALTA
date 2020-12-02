@@ -26,10 +26,8 @@ class RealLogoutRepo : LogoutRepo, RealRepo() {
             .build()
         val response = client.newCall(request).execute()
 
-        return if (response.code() == 200) {
+        return response.getRepoResponse {
             LoggedOut()
-        } else {
-            FailedResponse()
         }
     }
 }
