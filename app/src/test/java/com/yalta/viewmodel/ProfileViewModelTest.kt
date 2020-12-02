@@ -6,6 +6,7 @@ import org.junit.Rule
 import org.junit.Test
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.yalta.CoroutineTestRule
+import com.yalta.repositories.FakeLogoutRepo
 import com.yalta.repositories.FakeUserRepo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -22,7 +23,7 @@ class ProfileViewModelTest {
 
     @Before
     fun setup() {
-        viewModel = ProfileViewModel(FakeUserRepo(), coroutinesTestRule.testDispatcher)
+        viewModel = ProfileViewModel(FakeUserRepo(), FakeLogoutRepo(), coroutinesTestRule.testDispatcher)
     }
 
     private fun ensureDefaults() {
@@ -49,5 +50,11 @@ class ProfileViewModelTest {
         viewModel.changeValue()
         viewModel.changeValue()
         ensureDefaults()
+    }
+
+    @Test
+    fun logoutTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        viewModel.logout()
+        assertTrue(viewModel.loggedOut.value!!)
     }
 }
