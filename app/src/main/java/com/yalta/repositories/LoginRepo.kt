@@ -25,14 +25,12 @@ class RealLoginRepo : LoginRepo, RealRepo() {
 
         val response = client.newCall(request).execute()
 
-        return if (response.code() == 200) {
+        return response.getRepoResponse { res ->
             SuccessfulLogin(
-                response.header("Set-Cookie")
+                res.header("Set-Cookie")
                     .toString()
                     .substringBefore(';')
             )
-        } else {
-            FailedResponse()
         }
     }
 }
