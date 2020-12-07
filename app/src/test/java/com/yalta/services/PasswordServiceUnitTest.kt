@@ -16,12 +16,12 @@ class PasswordServiceUnitTest {
     var coroutinesTestRule = CoroutineTestRule()
 
     @Test
-    fun change_password() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun changePassword() = coroutinesTestRule.testDispatcher.runBlockingTest {
         assertTrue(PasswordService(repo).changePassword("newPass"))
     }
 
     @Test
-    fun bad_change_password() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun badChangePassword() = coroutinesTestRule.testDispatcher.runBlockingTest {
         val service = PasswordService(repo)
 
         assertTrue(service.changePassword("good"))

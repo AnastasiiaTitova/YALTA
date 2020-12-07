@@ -27,7 +27,7 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun logout_test() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun logoutTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         viewModel.logout()
         assertTrue(viewModel.loggedOut.value!!)
     }

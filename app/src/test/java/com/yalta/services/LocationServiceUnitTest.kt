@@ -18,7 +18,7 @@ class LocationServiceUnitTest {
     var coroutinesTestRule = CoroutineTestRule()
 
     @Test
-    fun add_location_test() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun addLocationTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         val location = Location("")
         location.latitude = 10.0
         location.longitude = 15.0

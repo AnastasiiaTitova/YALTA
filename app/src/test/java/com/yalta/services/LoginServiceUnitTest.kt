@@ -16,12 +16,12 @@ class LoginServiceUnitTest {
     private val repo = FakeLoginRepo()
 
     @Test
-    fun correct_credentials_test() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun correctCredentialsTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         assertTrue(LoginService(repo).login("root", "root"))
     }
 
     @Test
-    fun wrong_credentials_test() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun wrongCredentialsTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         assertFalse(LoginService(repo).login("user", "password"))
     }
 }

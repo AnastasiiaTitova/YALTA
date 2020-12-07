@@ -27,7 +27,7 @@ class ChangePasswordViewModel(
         val first = firstPassword.value
         val second = secondPassword.value
         if (!passwordsAreFine(first, second)) {
-            showError()
+            showError.value = true
             return
         }
 
@@ -41,10 +41,6 @@ class ChangePasswordViewModel(
 
     private fun passwordsAreFine(first: String?, second: String?) : Boolean {
         return first != null && second != null && first == second
-    }
-
-    private fun showError() {
-        showError.value = true
     }
 
     private fun closeActivity() = viewModelScope.launch(Dispatchers.Main) {

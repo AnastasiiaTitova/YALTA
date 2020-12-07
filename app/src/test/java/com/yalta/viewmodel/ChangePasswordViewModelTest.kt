@@ -26,7 +26,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun good_change_password_test() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun goodChangePasswordTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         viewModel.firstPassword.value = "OK"
         viewModel.secondPassword.value = "OK"
         viewModel.changePassword()
@@ -35,7 +35,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun change_password_null_test() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun changePasswordNullTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         viewModel.firstPassword.value = "OK"
         viewModel.changePassword()
         assertTrue(viewModel.showError.value!!)
@@ -43,7 +43,7 @@ class ChangePasswordViewModelTest {
     }
 
     @Test
-    fun change_password_different_test() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun changePasswordDifferentTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         viewModel.firstPassword.value = "OK"
         viewModel.secondPassword.value = "NotOK"
         viewModel.changePassword()
