@@ -36,20 +36,20 @@ class ChangePasswordActivity : AppCompatActivity() {
             error.visibility = if (showError) View.VISIBLE else View.INVISIBLE
         }
 
-        enter_field.setOnFocusChangeListener { _, _ -> changeFocus(binding) }
-        reenter_field.setOnFocusChangeListener { _, _ -> changeFocus(binding) }
+        password_field.setOnFocusChangeListener { _, _ -> onFocusChange(binding) }
+        password_confirmation_field.setOnFocusChangeListener { _, _ -> onFocusChange(binding) }
 
-        enter_field.setOnEditorActionListener { _, actionId, _ ->
+        password_field.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                Selection.setSelection(reenter_field.editableText, reenter_field.selectionStart)
-                reenter_field.requestFocus()
+                Selection.setSelection(password_confirmation_field.editableText, password_confirmation_field.selectionStart)
+                password_confirmation_field.requestFocus()
                 true
             } else {
                 false
             }
         }
 
-        reenter_field.setOnEditorActionListener { _, actionId, _ ->
+        password_confirmation_field.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 ok_button.requestFocus()
                 ok_button.performClick()
@@ -73,7 +73,7 @@ class ChangePasswordActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeFocus(binding: ActivityChangePasswordBinding) {
+    private fun onFocusChange(binding: ActivityChangePasswordBinding) {
         if (hasWindowFocus()) {
             binding.viewModel?.showError?.value = false
         }
