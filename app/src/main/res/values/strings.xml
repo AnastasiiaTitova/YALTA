@@ -9,5 +9,10 @@
     <string name="map">Map</string>
     <string name="profile">Profile</string>
     <string name="browse">Browse</string>
-    <string name="change_value">Change value</string>
+    <string name="change_password">Change password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="repeat_new_password">Repeat new password</string>
+    <string name="ok">OK</string>
+    <string name="close">Close</string>
+    <string name="passwords_differ">Passwords differ!</string>
 </resources>

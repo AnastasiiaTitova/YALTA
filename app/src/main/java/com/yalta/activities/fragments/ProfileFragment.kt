@@ -9,9 +9,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.yalta.R
+import com.yalta.activities.ChangePasswordActivity
 import com.yalta.activities.LoginActivity
 import com.yalta.databinding.FragmentProfileBinding
-import com.yalta.services.SessionService
 import com.yalta.viewmodel.ProfileViewModel
 
 class ProfileFragment : Fragment() {
@@ -30,6 +30,12 @@ class ProfileFragment : Fragment() {
         binding.viewModel?.loggedOut?.observe(viewLifecycleOwner, { loggedOut ->
             if (loggedOut) {
                 startActivity(Intent(activity, LoginActivity::class.java))
+            }
+        })
+
+        binding.viewModel?.changePassword?.observe(viewLifecycleOwner, { changePassword ->
+            if (changePassword) {
+                startActivity(Intent(activity, ChangePasswordActivity::class.java))
             }
         })
 

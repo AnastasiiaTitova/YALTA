@@ -9,7 +9,6 @@ class GotUser(val user: User) : SuccessfulResponse<GotUser>()
 
 interface UserRepo {
     suspend fun getUser(id: Long): RepoResponse<GotUser>
-    suspend fun changeUser(id: Long): User?
 }
 
 class RealUserRepo : UserRepo, RealRepo() {
@@ -25,9 +24,5 @@ class RealUserRepo : UserRepo, RealRepo() {
         return response.getRepoResponse { res ->
             GotUser(common.Serialization.fromJson(res.body()?.string()!!, User::class.java))
         }
-    }
-
-    override suspend fun changeUser(id: Long): User? {
-        TODO("NIY")
     }
 }
