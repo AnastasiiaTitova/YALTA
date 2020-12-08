@@ -32,8 +32,8 @@ class LoginActivity : AppCompatActivity() {
         val error: TextView = findViewById(R.id.errorText)
         val loginService = LoginService(RealLoginRepo())
 
-        user.setOnFocusChangeListener { _, _ -> user.onFocusChange(password, error) }
-        password.setOnFocusChangeListener { _, _ -> password.onFocusChange(user, error) }
+        user.setOnFocusChangeListener { _, _ -> user.onFocusChange(error) }
+        password.setOnFocusChangeListener { _, _ -> password.onFocusChange(error) }
 
         user.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
@@ -61,23 +61,19 @@ class LoginActivity : AppCompatActivity() {
                 if (loggedIn) {
                     this@LoginActivity.runOnUiThread { successfulLogin() }
                 } else {
-                    this@LoginActivity.runOnUiThread { showError(user, password, error) }
+                    this@LoginActivity.runOnUiThread { showError(error) }
                 }
             }
         }
     }
 
-    private fun EditText.onFocusChange(another: EditText, error: TextView) {
+    private fun EditText.onFocusChange(error: TextView) {
         if (hasWindowFocus()) {
-            setBackgroundResource(android.R.color.background_dark)
-            another.setBackgroundResource(android.R.color.background_dark)
             error.visibility = View.INVISIBLE
         }
     }
 
-    private fun showError(user: EditText, password: EditText, error: TextView) {
-        user.setBackgroundResource(android.R.color.holo_red_light)
-        password.setBackgroundResource(android.R.color.holo_red_light)
+    private fun showError(error: TextView) {
         error.visibility = View.VISIBLE
     }
 

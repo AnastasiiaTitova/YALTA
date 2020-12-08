@@ -12,8 +12,4 @@ class UserService(private val repo: UserRepo) {
             { null }
         )
     }
-
-    suspend fun changeUser(id: Long): User? {
-        return repo.changeUser(id)
-    }
 }

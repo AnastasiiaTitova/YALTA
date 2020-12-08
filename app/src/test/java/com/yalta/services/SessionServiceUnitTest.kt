@@ -6,14 +6,14 @@ import org.junit.Assert.*
 
 class SessionServiceUnitTest {
     @Test
-    fun init_test() {
+    fun initTest() {
         SessionService.setSession("token")
         assertNotNull(SessionService.session)
         assertTrue(SessionService.isLoggedIn())
     }
 
     @Test
-    fun discard_test() {
+    fun discardTest() {
         SessionService.discardSession()
         assertNull(SessionService.session)
         assertFalse(SessionService.isLoggedIn())

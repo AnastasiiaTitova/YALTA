@@ -10,9 +10,4 @@ class FakeUserRepo : UserRepo {
     override suspend fun getUser(id: Long): RepoResponse<GotUser> {
         return if (user.id != id) FailedResponse() else GotUser(user)
     }
-
-    override suspend fun changeUser(id: Long): User? {
-        user = User(user.id, user.name, user.password, if (user.role is Driver) Admin else Driver)
-        return user
-    }
 }

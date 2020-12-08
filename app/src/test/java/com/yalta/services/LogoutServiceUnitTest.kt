@@ -16,12 +16,12 @@ class LogoutServiceUnitTest {
     private val repo = FakeLogoutRepo()
 
     @Test
-    fun logout_test() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun logoutTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         assertTrue(LogoutService(repo).logout())
     }
 
     @Test
-    fun double_logout_test() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun doubleLogoutTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         val service = LogoutService(repo)
         assertTrue(service.logout())
         assertFalse(service.logout())

@@ -16,14 +16,14 @@ class UserServiceUnitTest {
     var coroutinesTestRule = CoroutineTestRule()
 
     @Test
-    fun get_correct_user_test() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun getCorrectUserTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         val response = UserService(repo).getUser()
         assertNotNull(response)
         assertEquals(1L, response?.id)
     }
 
     @Test
-    fun get_incorrect_user_test() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun getIncorrectUserTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         val response = UserService(repo).getUser(2)
         assertNull(response)
     }

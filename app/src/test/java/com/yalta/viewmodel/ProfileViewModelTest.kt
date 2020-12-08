@@ -26,32 +26,6 @@ class ProfileViewModelTest {
         viewModel = ProfileViewModel(FakeUserRepo(), FakeLogoutRepo(), coroutinesTestRule.testDispatcher)
     }
 
-    private fun ensureDefaults() {
-        assertEquals("root", viewModel.userName.value)
-        assertEquals("driver", viewModel.role.value)
-    }
-
-    @Test
-    fun testDefaults() {
-        ensureDefaults()
-    }
-
-    @Test
-    fun changeValueOnce() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        ensureDefaults()
-        viewModel.changeValue()
-        assertEquals("root", viewModel.userName.value)
-        assertEquals("admin", viewModel.role.value)
-    }
-
-    @Test
-    fun changeValueTwice() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        ensureDefaults()
-        viewModel.changeValue()
-        viewModel.changeValue()
-        ensureDefaults()
-    }
-
     @Test
     fun logoutTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         viewModel.logout()

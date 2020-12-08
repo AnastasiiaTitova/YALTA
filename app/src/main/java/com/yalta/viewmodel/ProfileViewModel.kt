@@ -30,6 +30,7 @@ class ProfileViewModel(
     private var _storedId = 0L
 
     val loggedOut = MutableLiveData<Boolean>()
+    val changePassword = MutableLiveData<Boolean>()
 
     init {
         viewModelScope.launch(dispatcher) {
@@ -41,11 +42,8 @@ class ProfileViewModel(
         }
     }
 
-    fun changeValue() = viewModelScope.launch(dispatcher) {
-        val user = _userService.changeUser(_storedId)
-        if (user != null) {
-            updateUser(user)
-        }
+    fun changePassword() {
+        changePassword.value = true
     }
 
     private fun updateUser(user: User) = viewModelScope.launch(Dispatchers.Main) {
