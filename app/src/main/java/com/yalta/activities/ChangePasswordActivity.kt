@@ -32,12 +32,8 @@ class ChangePasswordActivity : AppCompatActivity() {
             }
         }
 
-        binding.viewModel?.showError?.observeForever { showError ->
-            error.visibility = if (showError) View.VISIBLE else View.INVISIBLE
-        }
-
-        password_field.setOnFocusChangeListener { _, _ -> onFocusChange(binding) }
-        password_confirmation_field.setOnFocusChangeListener { _, _ -> onFocusChange(binding) }
+        password_field.setOnFocusChangeListener { _, _ -> binding.viewModel?.showError?.value = false }
+        password_confirmation_field.setOnFocusChangeListener { _, _ -> binding.viewModel?.showError?.value = false }
 
         password_field.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
@@ -70,12 +66,6 @@ class ChangePasswordActivity : AppCompatActivity() {
 
             finish()
             overridePendingTransition(0,0)
-        }
-    }
-
-    private fun onFocusChange(binding: ActivityChangePasswordBinding) {
-        if (hasWindowFocus()) {
-            binding.viewModel?.showError?.value = false
         }
     }
 }
