@@ -8,6 +8,6 @@ class FakeUserRepo : UserRepo {
     private var user = User(1, "root", "root", Driver)
 
     override suspend fun getUser(id: Long): RepoResponse<GotUser> {
-        return if (user.id != id) FailedResponse() else GotUser(user)
+        return if (user.id != id) FailedResponse(Reason.BAD_CODE) else GotUser(user)
     }
 }

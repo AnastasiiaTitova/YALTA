@@ -20,20 +20,24 @@ class ChangePasswordViewModel(
     val secondPassword = MutableLiveData<String>()
 
     val closeActivity = MutableLiveData(false)
-    val showError = MutableLiveData(false)
+    val showPasswordError = MutableLiveData(false)
+    val showConnectionError = MutableLiveData(false)
 
     fun changePassword()
     {
+        showConnectionError.value = false
         val first = firstPassword.value
         val second = secondPassword.value
         if (!passwordsAreFine(first, second)) {
-            showError.value = true
+            showPasswordError(true)
             return
         }
 
         viewModelScope.launch(dispatcher) {
             val res = _passwordService.changePassword(first!!)
-            if (res) {
+            if (!res.isPresent) {
+                showConnectionError()
+            } else if (res.get()) {
                 closeActivity()
             }
         }
@@ -45,5 +49,13 @@ class ChangePasswordViewModel(
 
     private fun closeActivity() = viewModelScope.launch(Dispatchers.Main) {
         closeActivity.value = true
+    }
+
+    private fun showConnectionError() = viewModelScope.launch(Dispatchers.Main) {
+        showConnectionError.value = true
+    }
+
+    fun showPasswordError(value: Boolean) {
+        showPasswordError.value = value
     }
 }
