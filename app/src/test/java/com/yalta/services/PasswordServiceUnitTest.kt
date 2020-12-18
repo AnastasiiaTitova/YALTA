@@ -1,9 +1,7 @@
 package com.yalta.services
 
 import com.yalta.CoroutineTestRule
-import com.yalta.repositories.FailedResponse
-import com.yalta.repositories.FakePasswordRepo
-import com.yalta.repositories.PasswordChanged
+import com.yalta.repositories.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.*
@@ -14,7 +12,7 @@ import org.mockito.Mockito.mock
 
 @ExperimentalCoroutinesApi
 class PasswordServiceUnitTest {
-    private val test = mock(FakePasswordRepo::class.java)
+    private val test = mock(RealPasswordRepo::class.java)
 
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
@@ -22,16 +20,20 @@ class PasswordServiceUnitTest {
     @Test
     fun changePassword() = coroutinesTestRule.testDispatcher.runBlockingTest {
         `when`(test.changePassword("newPass")).thenReturn(PasswordChanged())
-        assertTrue(PasswordService(test).changePassword("newPass"))
+        assertTrue(PasswordService(test).changePassword("newPass").get())
     }
 
     @Test
     fun badChangePassword() = coroutinesTestRule.testDispatcher.runBlockingTest {
         val service = PasswordService(test)
-        `when`(test.changePassword("good")).thenReturn(PasswordChanged())
-        `when`(test.changePassword("bad")).thenReturn(FailedResponse())
+        `when`(test.changePassword("bad")).thenReturn(FailedResponse(Reason.BAD_CODE))
+        assertFalse(service.changePassword("bad").get())
+    }
 
-        assertTrue(service.changePassword("good"))
-        assertFalse(service.changePassword("bad"))
+    @Test
+    fun connectionProblem() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        val service = PasswordService(test)
+        `when`(test.changePassword("bad2")).thenReturn(FailedResponse(Reason.FAILED_CONNECTION))
+        assertFalse(service.changePassword("bad2").isPresent)
     }
 }

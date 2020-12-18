@@ -3,13 +3,13 @@ package com.yalta.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Selection
-import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.yalta.R
 import com.yalta.databinding.ActivityChangePasswordBinding
+import com.yalta.utils.ActivityUtils.hideKeyboard
 import com.yalta.viewmodel.ChangePasswordViewModel
 import kotlinx.android.synthetic.main.activity_change_password.*
 
@@ -28,39 +28,37 @@ class ChangePasswordActivity : AppCompatActivity() {
 
         binding.viewModel?.closeActivity?.observeForever { closeActivity ->
             if (closeActivity) {
-                close_button.performClick()
+                closeButton.performClick()
             }
         }
 
-        password_field.setOnFocusChangeListener { _, _ -> binding.viewModel?.showError?.value = false }
-        password_confirmation_field.setOnFocusChangeListener { _, _ -> binding.viewModel?.showError?.value = false }
-
-        password_field.setOnEditorActionListener { _, actionId, _ ->
+        passwordField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                Selection.setSelection(password_confirmation_field.editableText, password_confirmation_field.selectionStart)
-                password_confirmation_field.requestFocus()
+                Selection.setSelection(passwordConfirmationField.editableText, passwordConfirmationField.selectionStart)
+                passwordConfirmationField.requestFocus()
                 true
             } else {
                 false
             }
         }
 
-        password_confirmation_field.setOnEditorActionListener { _, actionId, _ ->
+        passwordConfirmationField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                ok_button.requestFocus()
-                ok_button.performClick()
+                hideKeyboard()
+                okButton.requestFocus()
+                okButton.performClick()
                 true
             } else {
                 false
             }
         }
 
-        change_password_card.animate().alpha(1f).setDuration(500).setInterpolator(
+        changePasswordCard.animate().alpha(1f).setDuration(500).setInterpolator(
             DecelerateInterpolator()
         ).start()
 
-        close_button.setOnClickListener {
-            change_password_card.animate().alpha(0f).setDuration(500).setInterpolator(
+        closeButton.setOnClickListener {
+            changePasswordCard.animate().alpha(0f).setDuration(500).setInterpolator(
                 DecelerateInterpolator()
             ).start()
 

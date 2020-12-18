@@ -8,7 +8,7 @@ class FakeLogoutRepo : LogoutRepo {
         return if (_loggedOut) {
             LoggedOut()
         } else {
-            FailedResponse()
+            FailedResponse(Reason.BAD_CODE)
         }
     }
 }
