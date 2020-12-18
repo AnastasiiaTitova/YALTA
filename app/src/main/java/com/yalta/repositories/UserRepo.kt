@@ -5,11 +5,11 @@ import common.User
 class GotUser(val user: User) : SuccessfulResponse<GotUser>()
 
 interface UserRepo {
-    suspend fun getUser(id: Long): RepoResponse<GotUser>
+    suspend fun getUser(): RepoResponse<GotUser>
 }
 
 class RealUserRepo : UserRepo, RealRepo() {
-    override suspend fun getUser(id: Long): RepoResponse<GotUser> {
+    override suspend fun getUser(): RepoResponse<GotUser> {
         val response = doGetRequest("whoami")
 
         return response.getRepoResponse { res ->
