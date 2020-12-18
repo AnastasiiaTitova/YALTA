@@ -1,5 +1,6 @@
 package com.yalta.repositories
 
+import arrow.core.Either
 import okhttp3.Response
 
 sealed class RepoResponse<T>
@@ -7,7 +8,7 @@ open class SuccessfulResponse<T> : RepoResponse<T>()
 class FailedResponse<T>(val reason: Reason) : RepoResponse<T>()
 
 enum class Reason {
-    FAILED_CONNECTION, BAD_CODE
+    FAILED_CONNECTION, BAD_CODE, UNKNOWN
 }
 
 inline fun <reified S : SuccessfulResponse<S>, R> process(
@@ -25,18 +26,17 @@ inline fun <reified S : SuccessfulResponse<S>, R> process(
     }
 }
 
-fun <T : SuccessfulResponse<T>> Response?.getRepoResponse(
+fun <T : SuccessfulResponse<T>> Either<Reason, Response>.getRepoResponse(
     successfulResponseBuilder: (Response) -> T
 ): RepoResponse<T> {
-    return when {
-        this == null -> {
-            FailedResponse(Reason.FAILED_CONNECTION)
+    return when (this) {
+        is Either.Left -> {
+            FailedResponse(a)
         }
-        this.code() != 200 -> {
+        is Either.Right -> if (b.code() == 200) {
+            successfulResponseBuilder(b)
+        } else {
             FailedResponse(Reason.BAD_CODE)
-        }
-        else -> {
-            successfulResponseBuilder(this)
         }
     }
 }

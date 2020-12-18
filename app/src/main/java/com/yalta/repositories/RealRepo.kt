@@ -1,5 +1,6 @@
 package com.yalta.repositories
 
+import arrow.core.Either
 import com.yalta.services.SessionService
 import okhttp3.*
 import ru.gildor.coroutines.okhttp.await
@@ -10,7 +11,7 @@ open class RealRepo {
     private val baseUrl = "http://10.0.2.2:9000"
     private val client = OkHttpClient()
 
-    suspend fun doPostRequest(url : String, body : String) : Response? {
+    suspend fun doPostRequest(url : String, body : String) : Either<Reason, Response> {
         val request = Request.Builder()
             .addHeader("Cookie", SessionService.session?.token!!)
             .url("${baseUrl}/${url}")
@@ -19,31 +20,31 @@ open class RealRepo {
                     .parse("text/plain"), body))
             .build()
         return try {
-            client.newCall(request).await()
+            Either.Right(client.newCall(request).await())
         } catch (e: Exception) {
-            when (e) {
-                is SocketTimeoutException, is ConnectException -> null
-                else -> throw e
-            }
+            Either.Left(when (e) {
+                is SocketTimeoutException, is ConnectException -> Reason.FAILED_CONNECTION
+                else -> Reason.UNKNOWN
+            })
         }
     }
 
-    suspend fun doGetRequest(url: String): Response? {
+    suspend fun doGetRequest(url: String): Either<Reason, Response> {
         val request = Request.Builder()
             .addHeader("Cookie", SessionService.session?.token!!)
             .url("${baseUrl}/${url}")
             .build()
         return try {
-            client.newCall(request).await()
+            Either.Right(client.newCall(request).await())
         } catch (e: Exception) {
-            when (e) {
-                is SocketTimeoutException, is ConnectException -> null
-                else -> throw e
-            }
+            Either.Left(when (e) {
+                is SocketTimeoutException, is ConnectException -> Reason.FAILED_CONNECTION
+                else -> Reason.UNKNOWN
+            })
         }
     }
 
-    suspend fun doLoginRequest(login: String, password: String): Response? {
+    suspend fun doLoginRequest(login: String, password: String): Either<Reason, Response> {
         val url = "${baseUrl}/login?username=$login&password=$password"
         val request = Request.Builder()
             .url(url)
@@ -53,12 +54,12 @@ open class RealRepo {
             )
             .build()
         return try {
-            client.newCall(request).await()
+            Either.Right(client.newCall(request).await())
         } catch (e: Exception) {
-            when (e) {
-                is SocketTimeoutException, is ConnectException -> null
-                else -> throw e
-            }
+            Either.Left(when (e) {
+                is SocketTimeoutException, is ConnectException -> Reason.FAILED_CONNECTION
+                else -> Reason.UNKNOWN
+            })
         }
     }
 }
