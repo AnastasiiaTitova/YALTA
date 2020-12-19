@@ -5,9 +5,9 @@ import com.yalta.repositories.process
 import common.User
 
 class UserService(private val repo: UserRepo) {
-    suspend fun getUser(id: Long = 1): User? {
+    suspend fun getUser(): User? {
         return process(
-            { repo.getUser(id) },
+            { repo.getUser() },
             { it.user },
             { null }
         )

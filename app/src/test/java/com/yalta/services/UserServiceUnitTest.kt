@@ -1,30 +1,35 @@
 package com.yalta.services
 
 import com.yalta.CoroutineTestRule
-import com.yalta.repositories.FakeUserRepo
+import com.yalta.repositories.*
+import common.Driver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito
 
 @ExperimentalCoroutinesApi
 class UserServiceUnitTest {
-    private val repo = FakeUserRepo()
+    private val test = Mockito.mock(RealUserRepo::class.java)
 
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
 
     @Test
-    fun getCorrectUserTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        val response = UserService(repo).getUser()
+    fun getUserTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        Mockito.`when`(test.getUser()).thenReturn(GotUser(common.User(1, "user", "", Driver)))
+        val response = UserService(test).getUser()
         assertNotNull(response)
         assertEquals(1L, response?.id)
+        assertEquals("user", response?.name)
     }
 
     @Test
-    fun getIncorrectUserTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        val response = UserService(repo).getUser(2)
+    fun failedGetUserTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        Mockito.`when`(test.getUser()).thenReturn(FailedResponse(Reason.BAD_CODE))
+        val response = UserService(test).getUser()
         assertNull(response)
     }
 }

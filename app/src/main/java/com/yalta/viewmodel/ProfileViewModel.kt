@@ -29,8 +29,8 @@ class ProfileViewModel(
     private val _logoutService = LogoutService(logoutRepo)
     private var _storedId = 0L
 
-    val loggedOut = MutableLiveData<Boolean>()
-    val changePassword = MutableLiveData<Boolean>()
+    val loggedOut = MutableLiveData(false)
+    val changePassword = MutableLiveData(false)
 
     init {
         viewModelScope.launch(dispatcher) {
