@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,50 +11,90 @@
             type="com.yalta.viewmodel.ProfileViewModel" />
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activities.fragments.ProfileFragment">
 
         <TextView
+            android:id="@+id/userNameField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{`Username: ` + viewModel.userName}"
             android:textSize="20sp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="200dp"
-            android:id="@+id/userNameField" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@+id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/guidelineHorizontal" />
 
         <TextView
+            android:id="@+id/userRoleField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:text="@{`Role: ` + viewModel.role}"
             android:textSize="20sp"
-            android:layout_below="@+id/userNameField"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="50dp"
-            android:id="@+id/userRoleField" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@+id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/userNameField" />
 
         <Button
             android:id="@+id/changePassword"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_below="@+id/userRoleField"
-            android:layout_marginTop="70dp"
-            android:layout_marginStart="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="10dp"
+            android:onClick="@{() -> viewModel.changePassword()}"
             android:text="@string/change_password"
-            android:onClick="@{() -> viewModel.changePassword()}" />
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+            app:layout_constraintStart_toEndOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/userRoleField" />
 
         <Button
             android:id="@+id/logout"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_below="@+id/userRoleField"
-            android:layout_marginTop="70dp"
             android:layout_alignStart="@id/changePassword"
-            android:layout_marginStart="170dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+            android:onClick="@{() -> viewModel.logout()}"
             android:text="@string/logout"
-            android:onClick="@{() -> viewModel.logout()}"/>
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@id/guidelineCenter"
+            app:layout_constraintTop_toBottomOf="@id/userRoleField" />
 
-    </RelativeLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
