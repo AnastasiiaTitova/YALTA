@@ -3,7 +3,6 @@ package com.yalta.viewmodel
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.location.Location
 import android.os.Looper
 import androidx.lifecycle.*
 import com.google.android.gms.location.*
@@ -26,8 +25,6 @@ class MapViewModel(
     private var locationRequest: LocationRequest
     private var locationCallback: LocationCallback
 
-    private val _currentLocation = MutableLiveData<Location>()
-    val currentLocation: LiveData<Location> = _currentLocation
     val locationPermissionsGranted = MutableLiveData<Boolean>()
 
     private val _locationService = LocationService(repo)
@@ -46,7 +43,6 @@ class MapViewModel(
                 super.onLocationResult(locationResult)
 
                 if (locationResult?.lastLocation != null) {
-                    _currentLocation.value = locationResult.lastLocation
                     viewModelScope.launch(dispatcher) {
                         _locationService.sendCurrentLocation(locationResult.lastLocation)
                     }

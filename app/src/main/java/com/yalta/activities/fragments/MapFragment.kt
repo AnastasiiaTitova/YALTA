@@ -3,7 +3,6 @@ package com.yalta.activities.fragments
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,11 +12,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
 
 import com.yalta.R
 import com.yalta.databinding.FragmentMapBinding
@@ -29,8 +26,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var viewModel: MapViewModel
     private lateinit var mapView: MapView
 
-    private var location: Location? = null
-    private val defaultZoom = 16.0F
     private var map: GoogleMap? = null
 
     override fun onCreateView(
@@ -50,10 +45,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        binding.viewModel?.currentLocation?.observe(viewLifecycleOwner, { location ->
-            this.location = location
-            mapView.getMapAsync(this)
-        })
 
         mapView = view.findViewById(R.id.map)
         mapView.onCreate(savedInstanceState)
@@ -94,24 +85,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (grantedLocationPermission()) {
             viewModel.locationPermissionsGranted.value = true
             setLocationButtonEnabled(true)
-            maybeMoveCamera()
         } else {
             viewModel.locationPermissionsGranted.value = false
             setLocationButtonEnabled(false)
             requestPermissions()
-        }
-    }
-
-    private fun maybeMoveCamera() {
-        if (location != null) {
-            map?.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    LatLng(
-                        location!!.latitude,
-                        location!!.longitude
-                    ), defaultZoom
-                )
-            )
         }
     }
 
@@ -146,7 +123,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             ) {
                 viewModel.locationPermissionsGranted.value = true
                 setLocationButtonEnabled(true)
-                maybeMoveCamera()
             }
         } else {
             viewModel.locationPermissionsGranted.value = false

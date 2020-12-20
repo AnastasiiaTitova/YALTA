@@ -12,8 +12,9 @@ open class RealRepo {
     private val client = OkHttpClient()
 
     suspend fun doPostRequest(url : String, body : String) : Either<Reason, Response> {
+        val token = SessionService.session?.token ?: return Either.Left(Reason.LOGGED_OUT)
         val request = Request.Builder()
-            .addHeader("Cookie", SessionService.session?.token!!)
+            .addHeader("Cookie", token)
             .url("${baseUrl}/${url}")
             .post(RequestBody
                 .create(MediaType
@@ -30,8 +31,9 @@ open class RealRepo {
     }
 
     suspend fun doGetRequest(url: String): Either<Reason, Response> {
+        val token = SessionService.session?.token ?: return Either.Left(Reason.LOGGED_OUT)
         val request = Request.Builder()
-            .addHeader("Cookie", SessionService.session?.token!!)
+            .addHeader("Cookie", token)
             .url("${baseUrl}/${url}")
             .build()
         return try {

@@ -10,6 +10,9 @@ import com.yalta.activities.fragments.MapFragment
 import com.yalta.activities.fragments.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
+    private val browseFragment = BrowseFragment()
+    private val mapFragment = MapFragment()
+    private val profileFragment = ProfileFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,17 +20,40 @@ class MainActivity : AppCompatActivity() {
 
         val navigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
+        supportFragmentManager.beginTransaction()
+            .add(R.id.container, browseFragment)
+            .add(R.id.container, mapFragment)
+            .hide(mapFragment)
+            .add(R.id.container, profileFragment)
+            .hide(profileFragment)
+            .commit()
+
+        var currentFragment: Fragment = browseFragment
+
         navigation.setOnNavigationItemSelectedListener {
             val fragment: Fragment =
                 when (it.itemId) {
-                    R.id.browse -> BrowseFragment()
-                    R.id.map -> MapFragment()
-                    R.id.profile -> ProfileFragment()
+                    R.id.browse -> browseFragment
+                    R.id.map -> mapFragment
+                    R.id.profile -> profileFragment
                     else -> TODO()      // idk, we can't be here
             }
-            supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+            supportFragmentManager.beginTransaction()
+                .hide(currentFragment)
+                .show(fragment)
+                .commit()
+            currentFragment = fragment
             true
         }
         navigation.selectedItemId = R.id.browse
+    }
+
+    override fun onPause() {
+        supportFragmentManager.beginTransaction()
+            .detach(browseFragment)
+            .detach(mapFragment)
+            .detach(profileFragment)
+            .commit()
+        super.onPause()
     }
 }
