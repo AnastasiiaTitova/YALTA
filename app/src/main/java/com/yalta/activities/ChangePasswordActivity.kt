@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.yalta.R
 import com.yalta.databinding.ActivityChangePasswordBinding
-import com.yalta.utils.ActivityUtils.hideKeyboard
+import com.yalta.utils.ViewUtils.hideKeyboard
 import com.yalta.viewmodel.ChangePasswordViewModel
 import kotlinx.android.synthetic.main.activity_change_password.*
 
@@ -66,4 +66,6 @@ class ChangePasswordActivity : AppCompatActivity() {
             overridePendingTransition(0,0)
         }
     }
+
+    override fun onBackPressed() { }
 }

@@ -8,7 +8,7 @@ open class SuccessfulResponse<T> : RepoResponse<T>()
 class FailedResponse<T>(val reason: Reason) : RepoResponse<T>()
 
 enum class Reason {
-    FAILED_CONNECTION, BAD_CODE, UNKNOWN
+    FAILED_CONNECTION, BAD_CODE, LOGGED_OUT, UNKNOWN
 }
 
 inline fun <reified S : SuccessfulResponse<S>, R> process(

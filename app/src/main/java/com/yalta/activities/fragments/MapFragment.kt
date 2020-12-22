@@ -3,34 +3,28 @@ package com.yalta.activities.fragments
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
 
 import com.yalta.R
 import com.yalta.databinding.FragmentMapBinding
+import com.yalta.utils.ViewUtils.grantedLocationPermission
 import com.yalta.viewmodel.MapViewModel
 import com.yalta.viewmodel.MapViewModelFactory
-
+import kotlinx.coroutines.runBlocking
 
 class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var viewModel: MapViewModel
     private lateinit var mapView: MapView
 
-    private var location: Location? = null
-    private val defaultZoom = 16.0F
     private var map: GoogleMap? = null
 
     override fun onCreateView(
@@ -42,6 +36,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val binding: FragmentMapBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
 
+        mapView = view.findViewById(R.id.map)
+        mapView.onCreate(savedInstanceState)
+        mapView.onResume()
+
+        runBlocking {
+            mapView.getMapAsync(this@MapFragment)
+        }
+
         viewModel =
             ViewModelProvider(
                 this,
@@ -50,16 +52,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        binding.viewModel?.currentLocation?.observe(viewLifecycleOwner, { location ->
-            this.location = location
-            mapView.getMapAsync(this)
-        })
-
-        mapView = view.findViewById(R.id.map)
-        mapView.onCreate(savedInstanceState)
-        mapView.onResume()
-
-        mapView.getMapAsync(this)
 
         return view
     }
@@ -94,24 +86,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (grantedLocationPermission()) {
             viewModel.locationPermissionsGranted.value = true
             setLocationButtonEnabled(true)
-            maybeMoveCamera()
         } else {
             viewModel.locationPermissionsGranted.value = false
             setLocationButtonEnabled(false)
             requestPermissions()
-        }
-    }
-
-    private fun maybeMoveCamera() {
-        if (location != null) {
-            map?.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    LatLng(
-                        location!!.latitude,
-                        location!!.longitude
-                    ), defaultZoom
-                )
-            )
         }
     }
 
@@ -121,16 +99,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         map?.isMyLocationEnabled = state
     }
 
-    private fun grantedLocationPermission(): Boolean {
-        return (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) &&
-                (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED)
-    }
-
     private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
+        requestPermissions(
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
             1
         )
@@ -146,7 +116,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             ) {
                 viewModel.locationPermissionsGranted.value = true
                 setLocationButtonEnabled(true)
-                maybeMoveCamera()
             }
         } else {
             viewModel.locationPermissionsGranted.value = false
