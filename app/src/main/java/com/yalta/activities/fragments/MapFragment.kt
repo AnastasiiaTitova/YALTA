@@ -8,8 +8,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.GoogleMap
@@ -18,9 +16,10 @@ import com.google.android.gms.maps.OnMapReadyCallback
 
 import com.yalta.R
 import com.yalta.databinding.FragmentMapBinding
+import com.yalta.utils.ViewUtils.grantedLocationPermission
 import com.yalta.viewmodel.MapViewModel
 import com.yalta.viewmodel.MapViewModelFactory
-
+import kotlinx.coroutines.runBlocking
 
 class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var viewModel: MapViewModel
@@ -37,6 +36,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val binding: FragmentMapBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
 
+        mapView = view.findViewById(R.id.map)
+        mapView.onCreate(savedInstanceState)
+        mapView.onResume()
+
+        runBlocking {
+            mapView.getMapAsync(this@MapFragment)
+        }
+
         viewModel =
             ViewModelProvider(
                 this,
@@ -45,12 +52,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-
-        mapView = view.findViewById(R.id.map)
-        mapView.onCreate(savedInstanceState)
-        mapView.onResume()
-
-        mapView.getMapAsync(this)
 
         return view
     }
@@ -98,16 +99,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         map?.isMyLocationEnabled = state
     }
 
-    private fun grantedLocationPermission(): Boolean {
-        return (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) &&
-                (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED)
-    }
-
     private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
+        requestPermissions(
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
             1
         )

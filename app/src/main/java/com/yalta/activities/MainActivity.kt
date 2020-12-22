@@ -1,24 +1,38 @@
 package com.yalta.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yalta.R
+import com.yalta.activities.fragments.BlankFragment
 import com.yalta.activities.fragments.BrowseFragment
 import com.yalta.activities.fragments.MapFragment
 import com.yalta.activities.fragments.ProfileFragment
+import com.yalta.utils.ViewUtils.grantedLocationPermission
 
 class MainActivity : AppCompatActivity() {
-    private val browseFragment = BrowseFragment()
-    private val mapFragment = MapFragment()
-    private val profileFragment = ProfileFragment()
+    private lateinit var browseFragment: Fragment
+    private lateinit var mapFragment: Fragment
+    private lateinit var profileFragment: Fragment
+    private lateinit var currentFragment: Fragment
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val navigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
+
+        browseFragment = BrowseFragment()
+        profileFragment = ProfileFragment()
+        currentFragment = browseFragment
+
+        mapFragment = if (grantedLocationPermission()) {
+            MapFragment()
+        } else {
+            BlankFragment()
+        }
 
         supportFragmentManager.beginTransaction()
             .add(R.id.container, browseFragment)
@@ -28,8 +42,6 @@ class MainActivity : AppCompatActivity() {
             .hide(profileFragment)
             .commit()
 
-        var currentFragment: Fragment = browseFragment
-
         navigation.setOnNavigationItemSelectedListener {
             val fragment: Fragment =
                 when (it.itemId) {
@@ -37,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                     R.id.map -> mapFragment
                     R.id.profile -> profileFragment
                     else -> TODO()      // idk, we can't be here
-            }
+                }
             supportFragmentManager.beginTransaction()
                 .hide(currentFragment)
                 .show(fragment)
@@ -48,12 +60,5 @@ class MainActivity : AppCompatActivity() {
         navigation.selectedItemId = R.id.browse
     }
 
-    override fun onPause() {
-        supportFragmentManager.beginTransaction()
-            .detach(browseFragment)
-            .detach(mapFragment)
-            .detach(profileFragment)
-            .commit()
-        super.onPause()
-    }
+    override fun onBackPressed() { }
 }

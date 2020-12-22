@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.yalta.R
 import com.yalta.databinding.ActivityLoginBinding
 import com.yalta.services.*
-import com.yalta.utils.ActivityUtils.hideKeyboard
+import com.yalta.utils.ViewUtils.hideKeyboard
 import com.yalta.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -60,4 +60,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun successfulLogin() =
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+
+    override fun onBackPressed() { }
 }
