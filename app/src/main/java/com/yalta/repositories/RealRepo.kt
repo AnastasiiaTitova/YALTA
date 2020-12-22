@@ -46,6 +46,25 @@ open class RealRepo {
         }
     }
 
+    suspend fun doPutRequest(url : String, body : String): Either<Reason, Response> {
+        val token = SessionService.session?.token ?: return Either.Left(Reason.LOGGED_OUT)
+        val request = Request.Builder()
+            .addHeader("Cookie", token)
+            .url("${baseUrl}/${url}")
+            .put(RequestBody
+                .create(MediaType
+                    .parse("text/plain"), body))
+            .build()
+        return try {
+            Either.Right(client.newCall(request).await())
+        } catch (e: Exception) {
+            Either.Left(when (e) {
+                is SocketTimeoutException, is ConnectException -> Reason.FAILED_CONNECTION
+                else -> Reason.UNKNOWN
+            })
+        }
+    }
+
     suspend fun doLoginRequest(login: String, password: String): Either<Reason, Response> {
         val url = "${baseUrl}/login?username=$login&password=$password"
         val request = Request.Builder()
