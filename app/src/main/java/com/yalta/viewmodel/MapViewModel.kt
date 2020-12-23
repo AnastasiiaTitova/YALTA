@@ -15,16 +15,14 @@ import com.yalta.repositories.RealLocationRepo
 import com.yalta.services.LocationService
 import common.Route
 import common.RoutePoint
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 
 
 class MapViewModel(
     application: Application,
     repo: LocationRepo = RealLocationRepo(),
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AndroidViewModel(application) {
     private var context: Context = getApplication<Application>().applicationContext
     private var fusedLocationProviderClient: FusedLocationProviderClient
@@ -48,10 +46,7 @@ class MapViewModel(
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
-        viewModelScope.launch(dispatcher) {
-            _currentRoute = _locationService.getCurrentRoute()
-            updatePoints(_currentRoute?.points!!)
-        }
+        updateRoute()
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
@@ -63,26 +58,10 @@ class MapViewModel(
                     }
 
                     if (_currentRoute != null) {
-                        for (index in 0 until _currentRoute!!.points.size) {
-                            if (!_currentRoute!!.points[index].visited) {
-                                val results = FloatArray(1)
-                                Location.distanceBetween(
-                                    locationResult.lastLocation.latitude,
-                                    locationResult.lastLocation.longitude,
-                                    _currentRoute!!.points[index].point.lat,
-                                    _currentRoute!!.points[index].point.lon,
-                                    results)
-                                if (results[0] <= 100) {
-                                    val routeId = _currentRoute!!.id
-                                    viewModelScope.launch(dispatcher) {
-                                        val res = _locationService.updatePointState(routeId!!, index.toLong(), true)
-                                        if (res) {
-                                            _currentRoute = _locationService.getCurrentRoute()
-                                            updatePoints(_currentRoute?.points!!)
-                                        }
-                                    }
-                                }
-                            }
+                        val somePointsChanged = maybeUpdatePoints(locationResult.lastLocation)
+
+                        if (somePointsChanged) {
+                            updateRoute()
                         }
                     }
                 }
@@ -98,8 +77,48 @@ class MapViewModel(
         }
     }
 
+    private fun updateRoute() = viewModelScope.launch(dispatcher) {
+        _currentRoute = _locationService.getCurrentRoute()
+        if (_currentRoute != null) {
+            updatePoints(_currentRoute?.points!!)
+        }
+    }
+
     private fun updatePoints(points: List<RoutePoint>) = viewModelScope.launch(Dispatchers.Main) {
         _points.value = points
+    }
+
+    private fun calculateDistance(point: RoutePoint, currentLocation: Location): Float {
+        val results = FloatArray(1)
+        Location.distanceBetween(
+            currentLocation.latitude,
+            currentLocation.longitude,
+            point.point.lat,
+            point.point.lon,
+            results
+        )
+
+        return results[0]
+    }
+
+    private fun maybeUpdatePoints(currentLocation: Location): Boolean {
+        val changedPoints = _currentRoute?.points?.filter { point ->
+            !point.visited && calculateDistance(point, currentLocation) <= 100
+        }
+
+        if (changedPoints.isNullOrEmpty()) {
+            return false
+        }
+
+        val routeId = _currentRoute?.id!!
+        viewModelScope.launch {
+            changedPoints.map { point ->
+                viewModelScope.async(dispatcher) {
+                    _locationService.updatePointState(routeId, point.index, true)
+                }
+            }.awaitAll()
+        }
+        return true
     }
 
     @SuppressLint("MissingPermission")

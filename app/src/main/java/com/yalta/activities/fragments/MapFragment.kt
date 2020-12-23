@@ -13,23 +13,21 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
 import com.yalta.R
 import com.yalta.databinding.FragmentMapBinding
+import com.yalta.utils.MapUtils.convertToMarkerOptions
 import com.yalta.utils.ViewUtils.grantedLocationPermission
 import com.yalta.viewmodel.MapViewModel
 import com.yalta.viewmodel.MapViewModelFactory
-import common.RoutePoint
 import kotlinx.coroutines.runBlocking
 
 class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var viewModel: MapViewModel
     private lateinit var mapView: MapView
 
-    private var points: List<RoutePoint> = emptyList()
+    private var points: MutableList<MarkerOptions> = mutableListOf()
     private var map: GoogleMap? = null
 
     override fun onCreateView(
@@ -58,7 +56,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         binding.viewModel?.points?.observe(viewLifecycleOwner, { points ->
-            this.points = points
+            this.points = points.convertToMarkerOptions()
             mapView.getMapAsync(this)
         })
 
@@ -93,15 +91,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         for (point in points) {
-            val color = if (point.visited) BitmapDescriptorFactory.HUE_GREEN else BitmapDescriptorFactory.HUE_RED
-            map?.addMarker(
-                MarkerOptions()
-                    .position(LatLng(point.point.lat, point.point.lon))
-                    .title(point.point.name)
-                    .draggable(false)
-                    //.snippet() <- maybe put here info about items
-                    .icon(BitmapDescriptorFactory.defaultMarker(color))
-            )
+            map?.addMarker(point)
         }
         if (grantedLocationPermission()) {
             viewModel.locationPermissionsGranted.value = true
