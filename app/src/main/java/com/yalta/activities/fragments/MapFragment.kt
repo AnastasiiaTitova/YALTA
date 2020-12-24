@@ -13,9 +13,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.MarkerOptions
 
 import com.yalta.R
 import com.yalta.databinding.FragmentMapBinding
+import com.yalta.utils.MapUtils.convertToMarkerOptions
 import com.yalta.utils.ViewUtils.grantedLocationPermission
 import com.yalta.viewmodel.MapViewModel
 import com.yalta.viewmodel.MapViewModelFactory
@@ -25,6 +27,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var viewModel: MapViewModel
     private lateinit var mapView: MapView
 
+    private var markers: MutableList<MarkerOptions> = mutableListOf()
     private var map: GoogleMap? = null
 
     override fun onCreateView(
@@ -52,6 +55,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        binding.viewModel?.points?.observe(viewLifecycleOwner, { points ->
+            markers = points.convertToMarkerOptions()
+            mapView.getMapAsync(this)
+        })
 
         return view
     }
@@ -83,6 +90,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        for (marker in markers) {
+            map?.addMarker(marker)
+        }
         if (grantedLocationPermission()) {
             viewModel.locationPermissionsGranted.value = true
             setLocationButtonEnabled(true)
