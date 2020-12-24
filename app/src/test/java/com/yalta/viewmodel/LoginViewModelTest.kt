@@ -6,6 +6,7 @@ import com.yalta.repositories.FailedResponse
 import com.yalta.repositories.RealLoginRepo
 import com.yalta.repositories.Reason
 import com.yalta.repositories.SuccessfulLogin
+import common.Driver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.*
@@ -32,7 +33,7 @@ class LoginViewModelTest {
 
     @Test
     fun goodLogin() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.login("OK", "OK")).thenReturn(SuccessfulLogin("token"))
+        Mockito.`when`(test.login("OK", "OK")).thenReturn(SuccessfulLogin("token", Driver))
 
         viewModel.user.value = "OK"
         viewModel.password.value = "OK"

@@ -11,7 +11,7 @@ import com.yalta.activities.fragments.MapFragment
 import com.yalta.activities.fragments.ProfileFragment
 import com.yalta.utils.ViewUtils.grantedLocationPermission
 
-class MainActivity : AppCompatActivity() {
+class DriverMainActivity : AppCompatActivity() {
     private lateinit var browseFragment: Fragment
     private lateinit var mapFragment: Fragment
     private lateinit var profileFragment: Fragment
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_driver_main)
 
         val navigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 

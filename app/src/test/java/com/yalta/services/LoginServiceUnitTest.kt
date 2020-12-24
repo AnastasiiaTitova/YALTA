@@ -2,6 +2,7 @@ package com.yalta.services
 
 import com.yalta.CoroutineTestRule
 import com.yalta.repositories.*
+import common.Driver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.*
@@ -18,7 +19,7 @@ class LoginServiceUnitTest {
 
     @Test
     fun correctCredentialsTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.login("root", "root")).thenReturn(SuccessfulLogin("token"))
+        Mockito.`when`(test.login("root", "root")).thenReturn(SuccessfulLogin("token", Driver))
         assertTrue(LoginService(test).login("root", "root").get())
     }
 
