@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yalta.R
-import com.yalta.activities.fragments.BrowseFragment
+import com.yalta.activities.fragments.AdminBrowseFragment
 import com.yalta.activities.fragments.ProfileFragment
 
 class AdminMainActivity : AppCompatActivity() {
@@ -20,7 +20,7 @@ class AdminMainActivity : AppCompatActivity() {
 
         val navigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        browseFragment = BrowseFragment()
+        browseFragment = AdminBrowseFragment()
         profileFragment = ProfileFragment()
         currentFragment = browseFragment
 
