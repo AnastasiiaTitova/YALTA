@@ -12,6 +12,7 @@ import com.yalta.databinding.ActivityLoginBinding
 import com.yalta.services.*
 import com.yalta.utils.ViewUtils.hideKeyboard
 import com.yalta.viewmodel.LoginViewModel
+import common.Driver
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -59,7 +60,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun successfulLogin() =
-        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        if (SessionService.session != null && SessionService.session!!.role is Driver) {
+            startActivity(Intent(this@LoginActivity, DriverMainActivity::class.java))
+        } else {
+            startActivity(Intent(this@LoginActivity, AdminMainActivity::class.java))
+        }
 
     override fun onBackPressed() { }
 }

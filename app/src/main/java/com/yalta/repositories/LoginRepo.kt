@@ -1,6 +1,9 @@
 package com.yalta.repositories
 
-class SuccessfulLogin(val token: String) : SuccessfulResponse<SuccessfulLogin>()
+import common.Role
+import common.User
+
+class SuccessfulLogin(val token: String, val role: Role) : SuccessfulResponse<SuccessfulLogin>()
 
 interface LoginRepo {
     suspend fun login(login: String, password: String): RepoResponse<SuccessfulLogin>
@@ -14,7 +17,8 @@ class RealLoginRepo : LoginRepo, RealRepo() {
             SuccessfulLogin(
                 res.header("Set-Cookie")
                     .toString()
-                    .substringBefore(';')
+                    .substringBefore(';'),
+                common.Serialization.fromJson(res.body()?.string()!!, User::class.java).role!!
             )
         }
     }

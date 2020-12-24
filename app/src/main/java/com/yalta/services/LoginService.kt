@@ -8,7 +8,7 @@ class LoginService(private val repo: LoginRepo) {
         return process(
             { repo.login(login, password) },
             { sLogin ->
-                SessionService.setSession(sLogin.token)
+                SessionService.setSession(sLogin.token, sLogin.role)
                 Optional.of(true)
             },
             {
