@@ -25,11 +25,27 @@
             app:layout_constraintRight_toLeftOf="@id/guidelineRight"
             app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalTop" />
 
+        <EditText
+            android:id="@+id/pointSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:focusedByDefault="false"
+            android:hint="@string/search"
+            android:inputType="text"
+            android:maxLines="1"
+            android:text="@={viewmodel.search}"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
+            app:layout_constraintRight_toLeftOf="@id/guidelineRight"
+            app:layout_constraintTop_toBottomOf="@id/pointsHeader" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="0dp"
             app:items="@{viewmodel.points}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constrainedWidth="true"
@@ -37,7 +53,7 @@
             app:layout_constraintBottom_toTopOf="@id/guidelineHorizontalCenter"
             app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
             app:layout_constraintRight_toLeftOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/pointsHeader"
+            app:layout_constraintTop_toBottomOf="@id/pointSearch"
             app:layout_constraintVertical_bias="0.0"
             tools:listitem="@layout/point_details" />
 

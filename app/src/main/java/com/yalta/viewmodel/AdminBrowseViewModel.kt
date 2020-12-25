@@ -19,6 +19,8 @@ class AdminBrowseViewModel(
 ) : ViewModel() {
     private val _pointService = PointService(pointRepo)
     val points = MutableLiveData<List<UniversalRecyclerItem>>()
+    private val allPoints = mutableListOf<common.Point>()
+    val search = MutableLiveData<String>()
 
     init {
         getAllPoints()
@@ -26,15 +28,29 @@ class AdminBrowseViewModel(
 
     private fun getAllPoints() = viewModelScope.launch(dispatcher) {
         val receivedPoints = _pointService.getAllPoints()
-        updatePoints(receivedPoints)
-    }
-
-    private fun updatePoints(receivedPoints: List<common.Point>) = viewModelScope.launch(Dispatchers.Main) {
-        points.value = receivedPoints.map {
-            it.toRecyclerItem()
-        }
+        allPoints.addAll(receivedPoints)
+        updateUIPoints(allPoints)
     }
 
     private fun common.Point.toRecyclerItem() =
         UniversalRecyclerItem(this, R.layout.point_details, BR.point)
+
+    fun filterPoints() {
+        if (search.value.isNullOrEmpty()) {
+            updateUIPoints(allPoints)
+            return
+        }
+
+        val filteredPoints = allPoints.filter { point ->
+            point.name.contains(search.value.toString(), true)
+        }.toMutableList()
+        updateUIPoints(filteredPoints)
+    }
+
+    private fun updateUIPoints(newPoints: MutableList<common.Point>) = viewModelScope.launch(Dispatchers.Main) {
+        points.value = newPoints.map {
+            it.toRecyclerItem()
+        }
+    }
+
 }
