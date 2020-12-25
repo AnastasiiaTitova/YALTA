@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yalta.R
 import com.yalta.activities.fragments.BlankFragment
-import com.yalta.activities.fragments.BrowseFragment
+import com.yalta.activities.fragments.DriverBrowseFragment
 import com.yalta.activities.fragments.MapFragment
 import com.yalta.activities.fragments.ProfileFragment
 import com.yalta.utils.ViewUtils.grantedLocationPermission
@@ -24,7 +24,7 @@ class DriverMainActivity : AppCompatActivity() {
 
         val navigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        browseFragment = BrowseFragment()
+        browseFragment = DriverBrowseFragment()
         profileFragment = ProfileFragment()
         currentFragment = browseFragment
 
