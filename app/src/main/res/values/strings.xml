@@ -18,4 +18,5 @@
     <string name="connection_failed">Connection failed</string>
     <string name="permissions_request">Please, add location permissions and restart the app</string>
     <string name="points">Points</string>
+    <string name="search">Search</string>
 </resources>

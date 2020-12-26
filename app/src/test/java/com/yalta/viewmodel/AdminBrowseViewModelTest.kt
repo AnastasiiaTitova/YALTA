@@ -7,7 +7,7 @@ import com.yalta.repositories.PointRepo
 import common.Point
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,7 +33,38 @@ class AdminBrowseViewModelTest {
 
     @Test
     fun setupTest() {
-        Assert.assertEquals(1, viewModel.points.value?.size!!)
-        Assert.assertEquals(point, viewModel.points.value!![0].data)
+        assertEquals(1, viewModel.points.value?.size!!)
+        assertEquals(point, viewModel.points.value!![0].data)
+    }
+
+    @Test
+    fun nullFilterTest() {
+        viewModel.search.value = null
+        viewModel.filterPoints()
+        assertEquals(1, viewModel.points.value?.size!!)
+        assertEquals(point, viewModel.points.value!![0].data)
+    }
+
+    @Test
+    fun emptyFilterTest() {
+        viewModel.search.value = ""
+        viewModel.filterPoints()
+        assertEquals(1, viewModel.points.value?.size!!)
+        assertEquals(point, viewModel.points.value!![0].data)
+    }
+
+    @Test
+    fun goodFilterMatchingTest() {
+        viewModel.search.value = "1"
+        viewModel.filterPoints()
+        assertEquals(1, viewModel.points.value?.size!!)
+        assertEquals(point, viewModel.points.value!![0].data)
+    }
+
+    @Test
+    fun goodFilterNotMatchingTest() {
+        viewModel.search.value = "2"
+        viewModel.filterPoints()
+        assertEquals(0, viewModel.points.value?.size!!)
     }
 }
