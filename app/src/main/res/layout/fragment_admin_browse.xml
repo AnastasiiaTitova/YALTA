@@ -26,7 +26,7 @@
             app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalTop" />
 
         <EditText
-            android:id="@+id/pointSearch"
+            android:id="@+id/pointSearchField"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:focusable="true"
@@ -53,7 +53,7 @@
             app:layout_constraintBottom_toTopOf="@id/guidelineHorizontalCenter"
             app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
             app:layout_constraintRight_toLeftOf="@id/guidelineRight"
-            app:layout_constraintTop_toBottomOf="@id/pointSearch"
+            app:layout_constraintTop_toBottomOf="@id/pointSearchField"
             app:layout_constraintVertical_bias="0.0"
             tools:listitem="@layout/point_details" />
 

@@ -38,16 +38,16 @@ class AdminBrowseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pointSearch.clearFocus()
+        pointSearchField.clearFocus()
         recyclerView.requestFocus()
 
-        pointSearch.addTextChangedListener {
+        pointSearchField.addTextChangedListener {
             binding.viewmodel?.filterPoints()
         }
 
-        pointSearch.setOnEditorActionListener { _, actionId, _ ->
+        pointSearchField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                pointSearch.clearFocus()
+                pointSearchField.clearFocus()
                 recyclerView.requestFocus()
                 hideKeyboard()
                 true
