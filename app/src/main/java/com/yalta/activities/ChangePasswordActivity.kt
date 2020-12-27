@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Selection
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.yalta.R
@@ -28,9 +29,12 @@ class ChangePasswordActivity : AppCompatActivity() {
 
         binding.viewModel?.closeActivity?.observeForever { closeActivity ->
             if (closeActivity) {
-                closeButton.performClick()
+                closeActivity()
             }
         }
+
+        passwordField.doOnTextChanged { _, _, _, _ -> viewModel.showPasswordError(false) }
+        passwordConfirmationField.doOnTextChanged { _, _, _, _ -> viewModel.showPasswordError(false) }
 
         passwordField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
@@ -56,16 +60,18 @@ class ChangePasswordActivity : AppCompatActivity() {
         changePasswordCard.animate().alpha(1f).setDuration(500).setInterpolator(
             DecelerateInterpolator()
         ).start()
-
-        closeButton.setOnClickListener {
-            changePasswordCard.animate().alpha(0f).setDuration(500).setInterpolator(
-                DecelerateInterpolator()
-            ).start()
-
-            finish()
-            overridePendingTransition(0,0)
-        }
     }
 
-    override fun onBackPressed() { }
+    override fun onBackPressed() {
+        closeActivity()
+    }
+
+    private fun closeActivity() {
+        changePasswordCard.animate().alpha(0f).setDuration(500).setInterpolator(
+            DecelerateInterpolator()
+        ).start()
+
+        finish()
+        overridePendingTransition(0,0)
+    }
 }
