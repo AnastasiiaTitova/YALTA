@@ -5,11 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yalta.R
-import com.yalta.activities.fragments.AdminBrowseFragment
+import com.yalta.activities.fragments.AdminPointsFragment
 import com.yalta.activities.fragments.ProfileFragment
 
 class AdminMainActivity : AppCompatActivity() {
-    private lateinit var browseFragment: Fragment
+    private lateinit var pointsFragment: Fragment
     private lateinit var profileFragment: Fragment
     private lateinit var currentFragment: Fragment
 
@@ -20,12 +20,12 @@ class AdminMainActivity : AppCompatActivity() {
 
         val navigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        browseFragment = AdminBrowseFragment()
+        pointsFragment = AdminPointsFragment()
         profileFragment = ProfileFragment()
-        currentFragment = browseFragment
+        currentFragment = pointsFragment
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.container, browseFragment)
+            .add(R.id.container, pointsFragment)
             .add(R.id.container, profileFragment)
             .hide(profileFragment)
             .commit()
@@ -33,7 +33,7 @@ class AdminMainActivity : AppCompatActivity() {
         navigation.setOnNavigationItemSelectedListener {
             val fragment: Fragment =
                 when (it.itemId) {
-                    R.id.browse -> browseFragment
+                    R.id.points -> pointsFragment
                     R.id.profile -> profileFragment
                     else -> TODO()      // idk, we can't be here
                 }
