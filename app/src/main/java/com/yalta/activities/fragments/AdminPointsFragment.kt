@@ -1,5 +1,6 @@
 package com.yalta.activities.fragments
 
+import android.content.Intent
 import android.graphics.drawable.ClipDrawable.HORIZONTAL
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,25 +13,27 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.yalta.R
-import com.yalta.databinding.FragmentAdminBrowseBinding
+import com.yalta.activities.AddPointActivity
+import com.yalta.databinding.FragmentAdminPointsBinding
 import com.yalta.utils.ViewUtils.hideKeyboard
-import com.yalta.viewmodel.AdminBrowseViewModel
-import kotlinx.android.synthetic.main.fragment_admin_browse.*
+import com.yalta.viewmodel.AdminPointsViewModel
+import kotlinx.android.synthetic.main.fragment_admin_points.*
 
-class AdminBrowseFragment : Fragment() {
-    private val viewModel by lazy { ViewModelProvider(this).get(AdminBrowseViewModel::class.java) }
-    lateinit var binding: FragmentAdminBrowseBinding
+class AdminPointsFragment : Fragment() {
+    private val viewModel by lazy { ViewModelProvider(this).get(AdminPointsViewModel::class.java) }
+    lateinit var binding: FragmentAdminPointsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_browse, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_points, container, false)
 
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
         binding.recyclerView.addItemDecoration(DividerItemDecoration(context, HORIZONTAL))
+        binding.swipeContainer.setColorSchemeResources(android.R.color.holo_red_light)
 
         return binding.root
     }
@@ -40,6 +43,16 @@ class AdminBrowseFragment : Fragment() {
 
         pointSearchField.clearFocus()
         recyclerView.requestFocus()
+
+        viewModel.pointsUpdated.observeForever { pointsUpdated ->
+            if (pointsUpdated) {
+                swipeContainer.isRefreshing = false
+            }
+        }
+
+        swipeContainer.setOnRefreshListener {
+            viewModel.updatePoints()
+        }
 
         pointSearchField.addTextChangedListener {
             binding.viewmodel?.filterPoints()
@@ -54,6 +67,10 @@ class AdminBrowseFragment : Fragment() {
             } else {
                 false
             }
+        }
+
+        floatingAddPointButton.setOnClickListener {
+            startActivity(Intent(activity, AddPointActivity::class.java))
         }
     }
 }

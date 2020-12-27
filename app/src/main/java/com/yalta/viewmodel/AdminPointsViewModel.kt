@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AdminBrowseViewModel(
+class AdminPointsViewModel(
     pointRepo: PointRepo = RealPointRepo(),
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
@@ -21,6 +21,7 @@ class AdminBrowseViewModel(
     val points = MutableLiveData<List<UniversalRecyclerItem>>()
     private val allPoints = mutableListOf<common.Point>()
     val search = MutableLiveData<String>()
+    val pointsUpdated = MutableLiveData(false)
 
     init {
         getAllPoints()
@@ -28,6 +29,7 @@ class AdminBrowseViewModel(
 
     private fun getAllPoints() = viewModelScope.launch(dispatcher) {
         val receivedPoints = _pointService.getAllPoints()
+        allPoints.clear()
         allPoints.addAll(receivedPoints)
         updateUIPoints(allPoints)
     }
@@ -51,6 +53,11 @@ class AdminBrowseViewModel(
         points.value = newPoints.map {
             it.toRecyclerItem()
         }
+        pointsUpdated.value = true
     }
 
+    fun updatePoints() {
+        pointsUpdated.value = false
+        getAllPoints()
+    }
 }

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.yalta.viewmodel.AddPointViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_point_window_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activities.AddPointActivity">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/addPointCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:cardCornerRadius="3dp"
+            app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
+            app:layout_constraintRight_toLeftOf="@id/guidelineRight"
+            app:layout_constraintTop_toBottomOf="@id/guidelineHorizontal"
+            app:layout_constrainedWidth="true" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/changePasswordContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:minHeight="200dp"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
+                app:layout_constraintStart_toStartOf="@+id/guidelineCenter">
+
+                <TextView
+                    android:id="@+id/newPointHeader"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/create_new_point"
+                    android:textSize="20sp"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintLeft_toRightOf="@id/guidelineInnerLeft"
+                    app:layout_constraintRight_toLeftOf="@id/guidelineInnerRight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/pointNameField"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:focusedByDefault="false"
+                    android:hint="@string/name"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:text="@={viewModel.pointName}"
+                    android:onClick="@{() -> viewModel.showEmptyFieldError(false)}"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintLeft_toRightOf="@id/guidelineInnerLeft"
+                    app:layout_constraintRight_toLeftOf="@id/guidelineInnerRight"
+                    app:layout_constraintTop_toBottomOf="@id/newPointHeader" />
+
+                <EditText
+                    android:id="@+id/pointLatitudeField"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:focusedByDefault="false"
+                    android:hint="@string/latitude"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:maxLines="1"
+                    android:text="@={viewModel.pointLat}"
+                    android:onClick="@{() -> viewModel.showEmptyFieldError(false)}"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintLeft_toRightOf="@id/guidelineInnerLeft"
+                    app:layout_constraintRight_toLeftOf="@id/guidelineInnerRight"
+                    app:layout_constraintTop_toBottomOf="@id/pointNameField" />
+
+                <EditText
+                    android:id="@+id/pointLongitudeField"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:focusedByDefault="false"
+                    android:hint="@string/longitude"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:maxLines="1"
+                    android:text="@={viewModel.pointLon}"
+                    android:onClick="@{() -> viewModel.showEmptyFieldError(false)}"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintLeft_toRightOf="@id/guidelineInnerLeft"
+                    app:layout_constraintRight_toLeftOf="@id/guidelineInnerRight"
+                    app:layout_constraintTop_toBottomOf="@id/pointLatitudeField" />
+
+                <TextView
+                    android:id="@+id/fieldsError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:text="@string/fields_can_not_be_empty"
+                    android:textColor="@android:color/holo_red_light"
+                    android:visibility="@{viewModel.showEmptyFieldError ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintBottom_toTopOf="@+id/createPointButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pointLongitudeField" />
+
+                <TextView
+                    android:id="@+id/connectionError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:text="@string/connection_failed"
+                    android:textColor="@android:color/holo_red_light"
+                    android:visibility="@{viewModel.showConnectionError ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintBottom_toTopOf="@+id/createPointButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pointLongitudeField" />
+
+                <Button
+                    android:id="@+id/setCurrentLocationButton"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:enabled="@{viewModel.isCurrentPositionEnabled}"
+                    android:onClick="@{() -> viewModel.setCurrentLocation()}"
+                    android:text="@string/set_current_location"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+                    app:layout_constraintStart_toStartOf="@id/guidelineInnerLeft"
+                    app:layout_constraintTop_toBottomOf="@id/pointLongitudeField" />
+
+                <Button
+                    android:id="@+id/createPointButton"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:onClick="@{() -> viewModel.createNewPoint()}"
+                    android:text="@string/create_point"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintEnd_toEndOf="@id/guidelineInnerRight"
+                    app:layout_constraintStart_toEndOf="@id/guidelineCenter"
+                    app:layout_constraintTop_toBottomOf="@id/pointLongitudeField" />
+
+                <TextView
+                    android:id="@+id/permissionError"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/permissions_request"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/holo_red_light"
+                    android:visibility="@{viewModel.isCurrentPositionEnabled ? View.INVISIBLE : View.VISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guidelineInnerLeft"
+                    app:layout_constraintEnd_toStartOf="@id/guidelineInnerRight"
+                    app:layout_constraintTop_toBottomOf="@+id/createPointButton"
+                    app:layout_constrainedWidth="true"/>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineCenter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineInnerLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.05" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineInnerRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.95" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

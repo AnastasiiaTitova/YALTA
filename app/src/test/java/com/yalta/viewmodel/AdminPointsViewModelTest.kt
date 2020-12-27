@@ -14,8 +14,8 @@ import org.junit.Test
 import org.mockito.Mockito
 
 @ExperimentalCoroutinesApi
-class AdminBrowseViewModelTest {
-    private lateinit var viewModel: AdminBrowseViewModel
+class AdminPointsViewModelTest {
+    private lateinit var viewModel: AdminPointsViewModel
     private val test = Mockito.mock(PointRepo::class.java)
     private val point = Point(1, 1.0, 1.0, "1")
 
@@ -28,7 +28,7 @@ class AdminBrowseViewModelTest {
     @Before
     fun setup() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(test.getAllPoints()).thenReturn(GotPoints(listOf(point)))
-        viewModel = AdminBrowseViewModel(test, coroutinesTestRule.testDispatcher)
+        viewModel = AdminPointsViewModel(test, coroutinesTestRule.testDispatcher)
     }
 
     @Test
@@ -66,5 +66,11 @@ class AdminBrowseViewModelTest {
         viewModel.search.value = "2"
         viewModel.filterPoints()
         assertEquals(0, viewModel.points.value?.size!!)
+    }
+
+    @Test
+    fun updatePoints() {
+        viewModel.updatePoints()
+        setupTest()
     }
 }
