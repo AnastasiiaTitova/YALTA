@@ -1,6 +1,7 @@
 package com.yalta.repositories
 
 import common.User
+import javax.inject.Inject
 
 class GotUser(val user: User) : SuccessfulResponse<GotUser>()
 
@@ -8,7 +9,7 @@ interface UserRepo {
     suspend fun getUser(): RepoResponse<GotUser>
 }
 
-class RealUserRepo : UserRepo, RealRepo() {
+class RealUserRepo @Inject constructor(): UserRepo, RealRepo() {
     override suspend fun getUser(): RepoResponse<GotUser> {
         val response = doGetRequest("whoami")
 

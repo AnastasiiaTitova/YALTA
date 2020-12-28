@@ -9,18 +9,22 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.yalta.R
 import com.yalta.databinding.ActivityLoginBinding
+import com.yalta.di.YaltaApplication
 import com.yalta.services.*
 import com.yalta.utils.ViewUtils.hideKeyboard
 import com.yalta.viewmodel.LoginViewModel
 import common.Admin
 import common.Driver
 import kotlinx.android.synthetic.main.activity_login.*
+import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
-    private val viewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
+    @Inject
+    lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        YaltaApplication.appComponent.inject(this)
 
         if (SessionService.isLoggedIn()) {
             successfulLogin()
@@ -71,5 +75,5 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() { }
+    override fun onBackPressed() {}
 }

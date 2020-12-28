@@ -9,23 +9,28 @@ import com.yalta.activities.fragments.BlankFragment
 import com.yalta.activities.fragments.DriverBrowseFragment
 import com.yalta.activities.fragments.MapFragment
 import com.yalta.activities.fragments.ProfileFragment
+import com.yalta.di.YaltaApplication
 import com.yalta.utils.ViewUtils.grantedLocationPermission
+import javax.inject.Inject
 
 class DriverMainActivity : AppCompatActivity() {
-    private lateinit var browseFragment: Fragment
-    private lateinit var mapFragment: Fragment
-    private lateinit var profileFragment: Fragment
-    private lateinit var currentFragment: Fragment
+
+    @Inject
+    lateinit var browseFragment: DriverBrowseFragment
+    @Inject
+    lateinit var profileFragment: ProfileFragment
+    lateinit var mapFragment: Fragment
+    lateinit var currentFragment: Fragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_driver_main)
 
+        YaltaApplication.appComponent.inject(this)
+
         val navigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        browseFragment = DriverBrowseFragment()
-        profileFragment = ProfileFragment()
         currentFragment = browseFragment
 
         mapFragment = if (grantedLocationPermission()) {
@@ -60,5 +65,5 @@ class DriverMainActivity : AppCompatActivity() {
         navigation.selectedItemId = R.id.browse
     }
 
-    override fun onBackPressed() { }
+    override fun onBackPressed() {}
 }

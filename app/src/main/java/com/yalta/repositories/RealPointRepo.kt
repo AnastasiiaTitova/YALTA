@@ -2,6 +2,7 @@ package com.yalta.repositories
 
 import com.google.gson.reflect.TypeToken
 import common.Point
+import javax.inject.Inject
 
 class GotPoints(val points: List<Point>) : SuccessfulResponse<GotPoints>()
 class PointCreated : SuccessfulResponse<PointCreated>()
@@ -11,7 +12,7 @@ interface PointRepo {
     suspend fun createNewPoint(name: String, lat: Double, lon: Double): RepoResponse<PointCreated>
 }
 
-class RealPointRepo : PointRepo, RealRepo() {
+class RealPointRepo @Inject constructor() : PointRepo, RealRepo() {
     override suspend fun getAllPoints(): RepoResponse<GotPoints> {
         val response = doGetRequest("points/")
 

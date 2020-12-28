@@ -10,16 +10,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.yalta.R
 import com.yalta.databinding.ActivityChangePasswordBinding
+import com.yalta.di.YaltaApplication
 import com.yalta.utils.ViewUtils.hideKeyboard
 import com.yalta.viewmodel.ChangePasswordViewModel
 import kotlinx.android.synthetic.main.activity_change_password.*
+import javax.inject.Inject
 
 class ChangePasswordActivity : AppCompatActivity() {
-    private val viewModel by lazy { ViewModelProvider(this).get(ChangePasswordViewModel::class.java) }
+    @Inject
+    lateinit var viewModel: ChangePasswordViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(0, 0)
+
+        YaltaApplication.appComponent.inject(this)
 
         val binding: ActivityChangePasswordBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_change_password)

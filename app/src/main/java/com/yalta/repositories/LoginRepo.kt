@@ -2,6 +2,7 @@ package com.yalta.repositories
 
 import common.Role
 import common.User
+import javax.inject.Inject
 
 class SuccessfulLogin(val token: String, val role: Role) : SuccessfulResponse<SuccessfulLogin>()
 
@@ -9,7 +10,7 @@ interface LoginRepo {
     suspend fun login(login: String, password: String): RepoResponse<SuccessfulLogin>
 }
 
-class RealLoginRepo : LoginRepo, RealRepo() {
+class RealLoginRepo @Inject constructor(): LoginRepo, RealRepo() {
     override suspend fun login(login: String, password: String): RepoResponse<SuccessfulLogin> {
         val response = doLoginRequest(login, password)
 

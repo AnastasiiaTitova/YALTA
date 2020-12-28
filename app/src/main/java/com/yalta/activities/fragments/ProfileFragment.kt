@@ -12,10 +12,13 @@ import com.yalta.R
 import com.yalta.activities.ChangePasswordActivity
 import com.yalta.activities.LoginActivity
 import com.yalta.databinding.FragmentProfileBinding
+import com.yalta.di.YaltaApplication
 import com.yalta.viewmodel.ProfileViewModel
+import javax.inject.Inject
 
 class ProfileFragment : Fragment() {
-    private val viewModel by lazy { ViewModelProvider(this).get(ProfileViewModel::class.java) }
+    @Inject
+    lateinit var viewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,6 +26,8 @@ class ProfileFragment : Fragment() {
     ): View? {
         val binding: FragmentProfileBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
+
+        YaltaApplication.appComponent.inject(this)
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
