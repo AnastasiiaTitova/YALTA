@@ -4,7 +4,7 @@ import com.yalta.repositories.*
 import java.util.*
 import javax.inject.Inject
 
-class LoginService @Inject constructor(val repo: LoginRepo) {
+class LoginService @Inject constructor(private val repo: LoginRepo) {
     suspend fun login(login: String, password: String): Optional<Boolean> {
         return process(
             { repo.login(login, password) },
