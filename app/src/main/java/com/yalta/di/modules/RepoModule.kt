@@ -22,9 +22,4 @@ abstract class RepoModule {
 
     @Binds
     abstract fun bindPassRepo(repo: RealPasswordRepo): PasswordRepo
-
-
-
-//    @Provides
-//    fun provideRealRepo(): RealRepo = RealRepo()
 }
