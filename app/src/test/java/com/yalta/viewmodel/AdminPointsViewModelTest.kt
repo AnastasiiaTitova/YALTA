@@ -2,8 +2,7 @@ package com.yalta.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.yalta.CoroutineTestRule
-import com.yalta.repositories.GotPoints
-import com.yalta.repositories.PointRepo
+import com.yalta.services.PointService
 import common.Point
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -16,7 +15,7 @@ import org.mockito.Mockito
 @ExperimentalCoroutinesApi
 class AdminPointsViewModelTest {
     private lateinit var viewModel: AdminPointsViewModel
-    private val test = Mockito.mock(PointRepo::class.java)
+    private val test = Mockito.mock(PointService::class.java)
     private val point = Point(1, 1.0, 1.0, "1")
 
     @get:Rule
@@ -27,7 +26,7 @@ class AdminPointsViewModelTest {
 
     @Before
     fun setup() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.getAllPoints()).thenReturn(GotPoints(listOf(point)))
+        Mockito.`when`(test.getAllPoints()).thenReturn(listOf(point))
         viewModel = AdminPointsViewModel(test, coroutinesTestRule.testDispatcher)
     }
 
