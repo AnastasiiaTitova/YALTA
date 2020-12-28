@@ -3,7 +3,6 @@ package com.yalta.di.modules
 import com.yalta.repositories.*
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 
 @Module
 abstract class RepoModule {
@@ -22,4 +21,7 @@ abstract class RepoModule {
 
     @Binds
     abstract fun bindPassRepo(repo: RealPasswordRepo): PasswordRepo
+
+    @Binds
+    abstract fun bindLocationRepo(repo: RealLocationRepo): LocationRepo
 }

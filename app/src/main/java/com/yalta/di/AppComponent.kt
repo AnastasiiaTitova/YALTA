@@ -2,6 +2,7 @@ package com.yalta.di
 
 import com.yalta.activities.*
 import com.yalta.activities.fragments.AdminPointsFragment
+import com.yalta.activities.fragments.MapFragment
 import com.yalta.activities.fragments.ProfileFragment
 import com.yalta.di.modules.*
 import com.yalta.repositories.PointRepo
@@ -28,6 +29,7 @@ interface AppComponent {
 
     fun inject(activity: DriverMainActivity)
     fun inject(frgament: ProfileFragment)
+    fun inject(fragment: MapFragment)
 
     fun inject(activity: AdminMainActivity)
     fun inject(fragment: AdminPointsFragment)

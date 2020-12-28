@@ -1,37 +1,34 @@
 package com.yalta.viewmodel
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Context
 import android.location.Location
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.*
-import com.yalta.repositories.LocationRepo
-import com.yalta.repositories.RealLocationRepo
+import com.yalta.di.YaltaApplication
 import com.yalta.services.LocationService
 import common.Route
 import common.RoutePoint
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
-class MapViewModel(
-    application: Application,
-    repo: LocationRepo = RealLocationRepo(),
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : AndroidViewModel(application) {
-    private var context: Context = getApplication<Application>().applicationContext
+class MapViewModel @Inject constructor(
+    private val locationService: LocationService,
+    private val dispatcher: CoroutineDispatcher
+) : ViewModel() {
+    private var context: Context = YaltaApplication.context
     private var fusedLocationProviderClient: FusedLocationProviderClient
     private var locationRequest: LocationRequest
     private var locationCallback: LocationCallback
 
     val locationPermissionsGranted = MutableLiveData<Boolean>()
 
-    private val _locationService = LocationService(repo)
 
     private var _currentRoute: Route? = null
     private val _points = MutableLiveData<List<RoutePoint>>()
@@ -54,7 +51,7 @@ class MapViewModel(
 
                 if (locationResult?.lastLocation != null) {
                     viewModelScope.launch(dispatcher) {
-                        _locationService.sendCurrentLocation(locationResult.lastLocation)
+                        locationService.sendCurrentLocation(locationResult.lastLocation)
                     }
 
                     if (_currentRoute != null) {
@@ -78,7 +75,7 @@ class MapViewModel(
     }
 
     private fun updateRoute() = viewModelScope.launch(dispatcher) {
-        _currentRoute = _locationService.getCurrentRoute()
+        _currentRoute = locationService.getCurrentRoute()
         if (_currentRoute != null) {
             updatePoints(_currentRoute?.points!!)
         }
@@ -114,7 +111,7 @@ class MapViewModel(
         viewModelScope.launch {
             changedPoints.map { point ->
                 viewModelScope.async(dispatcher) {
-                    _locationService.updatePointState(routeId, point.index, true)
+                    locationService.updatePointState(routeId, point.index, true)
                 }
             }.awaitAll()
         }

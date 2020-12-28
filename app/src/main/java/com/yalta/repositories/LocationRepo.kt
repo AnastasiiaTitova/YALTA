@@ -4,6 +4,7 @@ import android.location.Location
 import common.LocationUpdate
 import common.Route
 import common.UpdatePoint
+import javax.inject.Inject
 
 class AddedLocation(val location: common.Location) : SuccessfulResponse<AddedLocation>()
 class GotRoute(val route: Route) : SuccessfulResponse<GotRoute>()
@@ -16,7 +17,7 @@ interface LocationRepo {
     suspend fun updatePointState(routeId: Long, pointId: Long, visited: Boolean) : RepoResponse<UpdatedPoint>
 }
 
-class RealLocationRepo : LocationRepo, RealRepo() {
+class RealLocationRepo @Inject constructor(): LocationRepo, RealRepo() {
     override suspend fun sendCurrentLocation(location: Location): RepoResponse<AddedLocation> {
         val body = common.Serialization.toJson(LocationUpdate(location.latitude, location.longitude))
         val response = doPostRequest("location/", body)
