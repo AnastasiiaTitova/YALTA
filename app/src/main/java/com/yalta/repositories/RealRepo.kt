@@ -6,7 +6,6 @@ import okhttp3.*
 import ru.gildor.coroutines.okhttp.await
 import java.net.ConnectException
 import java.net.SocketTimeoutException
-import javax.inject.Inject
 
 open class RealRepo {
     private val baseUrl = "http://10.0.2.2:9000"

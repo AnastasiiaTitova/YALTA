@@ -28,7 +28,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     @Inject
     lateinit var viewModel: MapViewModel
 
-    lateinit var mapView: MapView
+    private lateinit var mapView: MapView
 
     private var markers: MutableList<MarkerOptions> = mutableListOf()
     private var map: GoogleMap? = null
