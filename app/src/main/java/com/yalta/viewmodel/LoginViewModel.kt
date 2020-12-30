@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
-    private val service: LoginService,
+    private val loginService: LoginService,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -23,7 +23,7 @@ class LoginViewModel @Inject constructor(
     fun login() {
         showConnectionError.value = false
         viewModelScope.launch(dispatcher) {
-            val loggedIn = service.login(user.value!!, password.value!!)
+            val loggedIn = loginService.login(user.value!!, password.value!!)
             when {
                 !loggedIn.isPresent -> {
                     showConnectionError()

@@ -19,8 +19,8 @@ class DriverMainActivity : AppCompatActivity() {
     lateinit var browseFragment: DriverBrowseFragment
     @Inject
     lateinit var profileFragment: ProfileFragment
-    lateinit var mapFragment: Fragment
-    lateinit var currentFragment: Fragment
+    private lateinit var mapFragment: Fragment
+    private lateinit var currentFragment: Fragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
