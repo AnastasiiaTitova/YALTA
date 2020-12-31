@@ -3,8 +3,9 @@ package com.yalta.services
 import android.location.Location
 import com.yalta.repositories.*
 import common.Route
+import javax.inject.Inject
 
-class LocationService(private val repo: LocationRepo) {
+class LocationService @Inject constructor(private val repo: LocationRepo) {
     suspend fun sendCurrentLocation(location: Location): common.Location? {
         return process(
             { repo.sendCurrentLocation(location) },
@@ -23,7 +24,7 @@ class LocationService(private val repo: LocationRepo) {
 
     suspend fun updatePointState(routeId: Long, pointId: Long, visited: Boolean): Boolean {
         return process(
-            { repo.updatePointState(routeId, pointId, visited)},
+            { repo.updatePointState(routeId, pointId, visited) },
             { true },
             { false }
         )

@@ -2,23 +2,21 @@ package com.yalta.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.yalta.CoroutineTestRule
-import com.yalta.repositories.FailedResponse
-import com.yalta.repositories.RealLoginRepo
-import com.yalta.repositories.Reason
-import com.yalta.repositories.SuccessfulLogin
-import common.Driver
+import com.yalta.services.LoginService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
+import java.util.*
 
 @ExperimentalCoroutinesApi
 class LoginViewModelTest {
     private lateinit var viewModel: LoginViewModel
-    private val test = Mockito.mock(RealLoginRepo::class.java)
+    private val test = Mockito.mock(LoginService::class.java)
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -33,7 +31,7 @@ class LoginViewModelTest {
 
     @Test
     fun goodLogin() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.login("OK", "OK")).thenReturn(SuccessfulLogin("token", Driver))
+        Mockito.`when`(test.login("OK", "OK")).thenReturn(Optional.of(true))
 
         viewModel.user.value = "OK"
         viewModel.password.value = "OK"
@@ -45,7 +43,7 @@ class LoginViewModelTest {
 
     @Test
     fun badLogin() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.login("notOK", "notOK")).thenReturn(FailedResponse(Reason.BAD_CODE))
+        Mockito.`when`(test.login("notOK", "notOK")).thenReturn(Optional.of(false))
 
         viewModel.user.value = "notOK"
         viewModel.password.value = "notOK"
@@ -57,7 +55,7 @@ class LoginViewModelTest {
 
     @Test
     fun connectionProblem() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.login("OK", "OK")).thenReturn(FailedResponse(Reason.FAILED_CONNECTION))
+        Mockito.`when`(test.login("OK", "OK")).thenReturn(Optional.empty())
 
         viewModel.user.value = "OK"
         viewModel.password.value = "OK"

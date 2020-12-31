@@ -6,17 +6,18 @@ import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.yalta.R
 import com.yalta.databinding.ActivityAddPointBinding
+import com.yalta.di.YaltaApplication
 import com.yalta.utils.ViewUtils.grantedLocationPermission
 import com.yalta.utils.ViewUtils.hideKeyboard
 import com.yalta.viewmodel.AddPointViewModel
-import com.yalta.viewmodel.AddPointViewModelFactory
 import kotlinx.android.synthetic.main.activity_add_point.*
+import javax.inject.Inject
 
 class AddPointActivity : AppCompatActivity() {
-    private lateinit var viewModel: AddPointViewModel
+    @Inject
+    lateinit var viewModel: AddPointViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +26,7 @@ class AddPointActivity : AppCompatActivity() {
         val binding: ActivityAddPointBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_add_point)
 
-        viewModel = ViewModelProvider(
-            this,
-            AddPointViewModelFactory(application)
-        ).get(AddPointViewModel::class.java)
+        YaltaApplication.appComponent.inject(this)
 
         viewModel.isCurrentPositionEnabled.value = grantedLocationPermission()
 

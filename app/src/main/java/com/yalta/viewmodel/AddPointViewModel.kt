@@ -5,22 +5,23 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationServices
+import com.yalta.di.YaltaApplication
 import com.yalta.repositories.PointRepo
 import com.yalta.repositories.RealPointRepo
 import com.yalta.services.AddPointService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AddPointViewModel(
-    application: Application,
-    repo: PointRepo = RealPointRepo(),
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-): AndroidViewModel(application) {
-    private var context: Context = getApplication<Application>().applicationContext
-    private val _pointService = AddPointService(repo)
+class AddPointViewModel @Inject constructor(
+    private val pointService: AddPointService,
+    private val dispatcher: CoroutineDispatcher
+): ViewModel() {
+    private var context: Context = YaltaApplication.context
 
     val pointName = MutableLiveData<String>()
     val pointLat = MutableLiveData<String>()
@@ -37,7 +38,7 @@ class AddPointViewModel(
         val lon = pointLon.value?.toDoubleOrNull()
         if (fieldsAreOK(name, lat, lon)) {
             viewModelScope.launch(dispatcher) {
-                val res = _pointService.createNewPoint(name!!, lat!!, lon!!)
+                val res = pointService.createNewPoint(name!!, lat!!, lon!!)
                 if (!res) {
                     showConnectionError(true)
                 } else {

@@ -7,21 +7,26 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yalta.R
 import com.yalta.activities.fragments.AdminPointsFragment
 import com.yalta.activities.fragments.ProfileFragment
+import com.yalta.di.YaltaApplication
+import javax.inject.Inject
 
 class AdminMainActivity : AppCompatActivity() {
-    private lateinit var pointsFragment: Fragment
-    private lateinit var profileFragment: Fragment
-    private lateinit var currentFragment: Fragment
+
+    @Inject
+    lateinit var pointsFragment: AdminPointsFragment
+    @Inject
+    lateinit var profileFragment: ProfileFragment
+    lateinit var currentFragment: Fragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_main)
 
+        YaltaApplication.appComponent.inject(this)
+
         val navigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        pointsFragment = AdminPointsFragment()
-        profileFragment = ProfileFragment()
         currentFragment = pointsFragment
 
         supportFragmentManager.beginTransaction()
@@ -47,5 +52,5 @@ class AdminMainActivity : AppCompatActivity() {
         navigation.selectedItemId = R.id.browse
     }
 
-    override fun onBackPressed() { }
+    override fun onBackPressed() {}
 }

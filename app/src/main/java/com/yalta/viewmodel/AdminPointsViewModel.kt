@@ -6,18 +6,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yalta.R
 import com.yalta.repositories.PointRepo
-import com.yalta.repositories.RealPointRepo
 import com.yalta.services.PointService
 import com.yalta.utils.UniversalRecyclerItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AdminPointsViewModel(
-    pointRepo: PointRepo = RealPointRepo(),
+class AdminPointsViewModel @Inject constructor(
+    private val pointService: PointService,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
-    private val _pointService = PointService(pointRepo)
     val points = MutableLiveData<List<UniversalRecyclerItem>>()
     private val allPoints = mutableListOf<common.Point>()
     val search = MutableLiveData<String>()
@@ -28,7 +27,7 @@ class AdminPointsViewModel(
     }
 
     private fun getAllPoints() = viewModelScope.launch(dispatcher) {
-        val receivedPoints = _pointService.getAllPoints()
+        val receivedPoints = pointService.getAllPoints()
         allPoints.clear()
         allPoints.addAll(receivedPoints)
         updateUIPoints(allPoints)

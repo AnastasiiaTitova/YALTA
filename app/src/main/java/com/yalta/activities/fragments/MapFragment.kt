@@ -17,14 +17,17 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 import com.yalta.R
 import com.yalta.databinding.FragmentMapBinding
+import com.yalta.di.YaltaApplication
 import com.yalta.utils.MapUtils.convertToMarkerOptions
 import com.yalta.utils.ViewUtils.grantedLocationPermission
 import com.yalta.viewmodel.MapViewModel
-import com.yalta.viewmodel.MapViewModelFactory
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
 class MapFragment : Fragment(), OnMapReadyCallback {
-    private lateinit var viewModel: MapViewModel
+    @Inject
+    lateinit var viewModel: MapViewModel
+
     private lateinit var mapView: MapView
 
     private var markers: MutableList<MarkerOptions> = mutableListOf()
@@ -36,6 +39,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
+        YaltaApplication.appComponent.inject(this)
+
         val binding: FragmentMapBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
 
@@ -46,12 +51,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         runBlocking {
             mapView.getMapAsync(this@MapFragment)
         }
-
-        viewModel =
-            ViewModelProvider(
-                this,
-                MapViewModelFactory(requireActivity().application)
-            ).get(MapViewModel::class.java)
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel

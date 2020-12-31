@@ -15,12 +15,15 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.yalta.R
 import com.yalta.activities.AddPointActivity
 import com.yalta.databinding.FragmentAdminPointsBinding
+import com.yalta.di.YaltaApplication
 import com.yalta.utils.ViewUtils.hideKeyboard
 import com.yalta.viewmodel.AdminPointsViewModel
 import kotlinx.android.synthetic.main.fragment_admin_points.*
+import javax.inject.Inject
 
 class AdminPointsFragment : Fragment() {
-    private val viewModel by lazy { ViewModelProvider(this).get(AdminPointsViewModel::class.java) }
+    @Inject lateinit var viewModel: AdminPointsViewModel
+
     lateinit var binding: FragmentAdminPointsBinding
 
     override fun onCreateView(
@@ -28,6 +31,8 @@ class AdminPointsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_points, container, false)
+
+        YaltaApplication.appComponent.inject(this)
 
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this

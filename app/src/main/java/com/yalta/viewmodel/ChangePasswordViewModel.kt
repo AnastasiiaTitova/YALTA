@@ -9,12 +9,12 @@ import com.yalta.services.PasswordService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ChangePasswordViewModel(
-    repo: PasswordRepo = RealPasswordRepo(),
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+class ChangePasswordViewModel @Inject constructor(
+    private val passwordService: PasswordService,
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    private val _passwordService = PasswordService(repo)
 
     val firstPassword = MutableLiveData<String>()
     val secondPassword = MutableLiveData<String>()
@@ -34,7 +34,7 @@ class ChangePasswordViewModel(
         }
 
         viewModelScope.launch(dispatcher) {
-            val res = _passwordService.changePassword(first!!)
+            val res = passwordService.changePassword(first!!)
             if (!res.isPresent) {
                 showConnectionError()
             } else if (res.get()) {

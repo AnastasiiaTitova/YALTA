@@ -5,19 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yalta.repositories.LogoutRepo
-import com.yalta.repositories.RealLogoutRepo
-import com.yalta.repositories.RealUserRepo
 import com.yalta.repositories.UserRepo
 import com.yalta.services.*
 import common.User
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProfileViewModel(
-    userRepo: UserRepo = RealUserRepo(),
-    logoutRepo: LogoutRepo = RealLogoutRepo(),
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+class ProfileViewModel @Inject constructor(
+    private val userService: UserService,
+    private val logoutService: LogoutService,
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> = _userName
@@ -25,8 +24,6 @@ class ProfileViewModel(
     private val _role = MutableLiveData<String>()
     val role: LiveData<String> = _role
 
-    private val _userService = UserService(userRepo)
-    private val _logoutService = LogoutService(logoutRepo)
     private var _storedId = 0L
 
     val loggedOut = MutableLiveData(false)
@@ -34,7 +31,7 @@ class ProfileViewModel(
 
     init {
         viewModelScope.launch(dispatcher) {
-            val user = _userService.getUser()
+            val user = userService.getUser()
             if (user != null) {
                 _storedId = user.id!!
                 updateUser(user)
@@ -52,7 +49,7 @@ class ProfileViewModel(
     }
 
     fun logout() = viewModelScope.launch(dispatcher) {
-        val res = _logoutService.logout()
+        val res = logoutService.logout()
         if (res) {
             loggedOut()
         }

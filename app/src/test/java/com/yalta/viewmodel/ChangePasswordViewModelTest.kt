@@ -2,19 +2,21 @@ package com.yalta.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.yalta.CoroutineTestRule
-import com.yalta.repositories.*
+import com.yalta.services.PasswordService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
+import java.util.*
 
 @ExperimentalCoroutinesApi
 class ChangePasswordViewModelTest {
     private lateinit var viewModel: ChangePasswordViewModel
-    private val test = Mockito.mock(RealPasswordRepo::class.java)
+    private val test = Mockito.mock(PasswordService::class.java)
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -29,7 +31,7 @@ class ChangePasswordViewModelTest {
 
     @Test
     fun goodChangePasswordTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.changePassword("OK")).thenReturn(PasswordChanged())
+        Mockito.`when`(test.changePassword("OK")).thenReturn(Optional.of(true))
         viewModel.firstPassword.value = "OK"
         viewModel.secondPassword.value = "OK"
         viewModel.changePassword()
@@ -59,7 +61,7 @@ class ChangePasswordViewModelTest {
 
     @Test
     fun failedConnectionTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.changePassword("OK")).thenReturn(FailedResponse(Reason.FAILED_CONNECTION))
+        Mockito.`when`(test.changePassword("OK")).thenReturn(Optional.empty())
         viewModel.firstPassword.value = "OK"
         viewModel.secondPassword.value = "OK"
         viewModel.changePassword()
