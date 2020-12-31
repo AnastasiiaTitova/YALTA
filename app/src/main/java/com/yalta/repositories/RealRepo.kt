@@ -30,11 +30,18 @@ open class RealRepo {
         }
     }
 
-    suspend fun doGetRequest(url: String): Either<Reason, Response> {
+    suspend fun doGetRequest(url: String, queryParameters: List<Pair<String, String>> = emptyList()): Either<Reason, Response> {
         val token = SessionService.session?.token ?: return Either.Left(Reason.LOGGED_OUT)
+
+        val httpUrl = HttpUrl.parse("${baseUrl}/${url}")?.newBuilder()
+        for (parameter in queryParameters) {
+            httpUrl?.addQueryParameter(parameter.first, parameter.second)
+        }
+        httpUrl?.build()
+
         val request = Request.Builder()
             .addHeader("Cookie", token)
-            .url("${baseUrl}/${url}")
+            .url(httpUrl.toString())
             .build()
         return try {
             Either.Right(client.newCall(request).await())

@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yalta.R
 import com.yalta.activities.fragments.BlankFragment
-import com.yalta.activities.fragments.DriverBrowseFragment
+import com.yalta.activities.fragments.DriverRoutesFragment
 import com.yalta.activities.fragments.MapFragment
 import com.yalta.activities.fragments.ProfileFragment
 import com.yalta.di.YaltaApplication
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class DriverMainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var browseFragment: DriverBrowseFragment
+    lateinit var routesFragment: DriverRoutesFragment
     @Inject
     lateinit var profileFragment: ProfileFragment
     private lateinit var mapFragment: Fragment
@@ -31,7 +31,7 @@ class DriverMainActivity : AppCompatActivity() {
 
         val navigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        currentFragment = browseFragment
+        currentFragment = routesFragment
 
         mapFragment = if (grantedLocationPermission()) {
             MapFragment()
@@ -40,7 +40,7 @@ class DriverMainActivity : AppCompatActivity() {
         }
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.container, browseFragment)
+            .add(R.id.container, routesFragment)
             .add(R.id.container, mapFragment)
             .hide(mapFragment)
             .add(R.id.container, profileFragment)
@@ -50,7 +50,7 @@ class DriverMainActivity : AppCompatActivity() {
         navigation.setOnNavigationItemSelectedListener {
             val fragment: Fragment =
                 when (it.itemId) {
-                    R.id.browse -> browseFragment
+                    R.id.routes -> routesFragment
                     R.id.map -> mapFragment
                     R.id.profile -> profileFragment
                     else -> TODO()      // idk, we can't be here
@@ -62,7 +62,7 @@ class DriverMainActivity : AppCompatActivity() {
             currentFragment = fragment
             true
         }
-        navigation.selectedItemId = R.id.browse
+        navigation.selectedItemId = R.id.routes
     }
 
     override fun onBackPressed() {}

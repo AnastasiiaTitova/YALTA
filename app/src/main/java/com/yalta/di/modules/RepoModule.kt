@@ -18,4 +18,7 @@ abstract class RepoModule {
 
     @Binds
     abstract fun bindLocationRepo(repo: RealLocationRepo): LocationRepo
+
+    @Binds
+    abstract fun bindRoutesRepo(repo: RealRoutesRepo): RoutesRepo
 }

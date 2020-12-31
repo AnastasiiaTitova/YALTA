@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yalta.R
-import com.yalta.repositories.PointRepo
 import com.yalta.services.PointService
 import com.yalta.utils.UniversalRecyclerItem
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,7 +14,7 @@ import javax.inject.Inject
 
 class AdminPointsViewModel @Inject constructor(
     private val pointService: PointService,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     val points = MutableLiveData<List<UniversalRecyclerItem>>()
     private val allPoints = mutableListOf<common.Point>()

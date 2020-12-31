@@ -39,4 +39,20 @@ class PointServiceUnitTest {
         Mockito.`when`(test.getAllPoints()).thenReturn(FailedResponse(Reason.BAD_CODE))
         Assert.assertTrue(PointService(test).getAllPoints().isEmpty())
     }
+
+    @Test
+    fun failedNewPoint() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        val name = "name"
+        val coordinate = 0.0
+        Mockito.`when`(test.createNewPoint(name, coordinate, coordinate)).thenReturn(FailedResponse(Reason.BAD_CODE))
+        Assert.assertFalse(PointService(test).createNewPoint(name, coordinate, coordinate))
+    }
+
+    @Test
+    fun successfulNewPoint() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        val name = "name1"
+        val coordinate = 0.0
+        Mockito.`when`(test.createNewPoint(name, coordinate, coordinate)).thenReturn(PointCreated())
+        Assert.assertTrue(PointService(test).createNewPoint(name, coordinate, coordinate))
+    }
 }

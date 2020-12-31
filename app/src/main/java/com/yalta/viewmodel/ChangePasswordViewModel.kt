@@ -3,8 +3,6 @@ package com.yalta.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yalta.repositories.PasswordRepo
-import com.yalta.repositories.RealPasswordRepo
 import com.yalta.services.PasswordService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

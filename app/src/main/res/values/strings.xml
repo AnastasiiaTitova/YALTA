@@ -8,7 +8,7 @@
     <string name="logout">Logout</string>
     <string name="map">Map</string>
     <string name="profile">Profile</string>
-    <string name="browse">Browse</string>
+    <string name="routes">Routes</string>
     <string name="change_password">Change password</string>
     <string name="enter_new_password">Enter new password</string>
     <string name="repeat_new_password">Repeat new password</string>
@@ -26,4 +26,5 @@
     <string name="create_point">Create point</string>
     <string name="set_current_location">Set current location</string>
     <string name="fields_can_not_be_empty">Fields can not be empty</string>
+    <string name="dates_error">Selected From date is later than To date</string>
 </resources>
