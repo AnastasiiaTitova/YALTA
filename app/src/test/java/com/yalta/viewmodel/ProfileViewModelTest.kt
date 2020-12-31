@@ -2,8 +2,7 @@ package com.yalta.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.yalta.CoroutineTestRule
-import com.yalta.services.LogoutService
-import com.yalta.services.UserService
+import com.yalta.services.AuthService
 import common.Driver
 import common.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,9 +17,7 @@ import org.mockito.Mockito
 @ExperimentalCoroutinesApi
 class ProfileViewModelTest {
     private lateinit var viewModel: ProfileViewModel
-    private val testUser = Mockito.mock(UserService::class.java)
-    private val testLogout = Mockito.mock(LogoutService::class.java)
-
+    private val testAuth = Mockito.mock(AuthService::class.java)
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -30,20 +27,20 @@ class ProfileViewModelTest {
 
     @Before
     fun setup() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(testUser.getUser()).thenReturn(User(1, "user", "", Driver))
-        viewModel = ProfileViewModel(testUser, testLogout, coroutinesTestRule.testDispatcher)
+        Mockito.`when`(testAuth.getUser()).thenReturn(User(1, "user", "", Driver))
+        viewModel = ProfileViewModel(testAuth, coroutinesTestRule.testDispatcher)
     }
 
     @Test
     fun goodLogoutTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(testLogout.logout()).thenReturn(true)
+        Mockito.`when`(testAuth.logout()).thenReturn(true)
         viewModel.logout()
         assertTrue(viewModel.loggedOut.value!!)
     }
 
     @Test
     fun badLogoutTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(testLogout.logout()).thenReturn(false)
+        Mockito.`when`(testAuth.logout()).thenReturn(false)
         viewModel.logout()
         assertFalse(viewModel.loggedOut.value!!)
     }

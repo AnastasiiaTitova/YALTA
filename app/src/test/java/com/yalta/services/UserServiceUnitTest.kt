@@ -12,7 +12,7 @@ import org.mockito.Mockito
 
 @ExperimentalCoroutinesApi
 class UserServiceUnitTest {
-    private val test = Mockito.mock(RealUserRepo::class.java)
+    private val test = Mockito.mock(RealAuthRepo::class.java)
 
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
@@ -20,7 +20,7 @@ class UserServiceUnitTest {
     @Test
     fun getUserTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(test.getUser()).thenReturn(GotUser(common.User(1, "user", "", Driver)))
-        val response = UserService(test).getUser()
+        val response = AuthService(test).getUser()
         assertNotNull(response)
         assertEquals(1L, response?.id)
         assertEquals("user", response?.name)
@@ -29,7 +29,7 @@ class UserServiceUnitTest {
     @Test
     fun failedGetUserTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(test.getUser()).thenReturn(FailedResponse(Reason.BAD_CODE))
-        val response = UserService(test).getUser()
+        val response = AuthService(test).getUser()
         assertNull(response)
     }
 }

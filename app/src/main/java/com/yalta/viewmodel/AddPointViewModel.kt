@@ -1,24 +1,20 @@
 package com.yalta.viewmodel
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationServices
 import com.yalta.di.YaltaApplication
-import com.yalta.repositories.PointRepo
-import com.yalta.repositories.RealPointRepo
-import com.yalta.services.AddPointService
+import com.yalta.services.PointService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AddPointViewModel @Inject constructor(
-    private val pointService: AddPointService,
+    private val pointService: PointService,
     private val dispatcher: CoroutineDispatcher
 ): ViewModel() {
     private var context: Context = YaltaApplication.context

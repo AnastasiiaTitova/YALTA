@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yalta.repositories.LogoutRepo
-import com.yalta.repositories.UserRepo
 import com.yalta.services.*
 import common.User
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,8 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProfileViewModel @Inject constructor(
-    private val userService: UserService,
-    private val logoutService: LogoutService,
+    private val authService: AuthService,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val _userName = MutableLiveData<String>()
@@ -31,7 +28,7 @@ class ProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(dispatcher) {
-            val user = userService.getUser()
+            val user = authService.getUser()
             if (user != null) {
                 _storedId = user.id!!
                 updateUser(user)
@@ -49,7 +46,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun logout() = viewModelScope.launch(dispatcher) {
-        val res = logoutService.logout()
+        val res = authService.logout()
         if (res) {
             loggedOut()
         }

@@ -4,7 +4,9 @@ import android.location.Location
 import com.yalta.repositories.*
 import common.Route
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class LocationService @Inject constructor(private val repo: LocationRepo) {
     suspend fun sendCurrentLocation(location: Location): common.Location? {
         return process(

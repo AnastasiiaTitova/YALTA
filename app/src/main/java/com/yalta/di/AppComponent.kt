@@ -5,15 +5,11 @@ import com.yalta.activities.fragments.AdminPointsFragment
 import com.yalta.activities.fragments.MapFragment
 import com.yalta.activities.fragments.ProfileFragment
 import com.yalta.di.modules.*
-import com.yalta.repositories.PointRepo
-import com.yalta.repositories.RealPointRepo
-import com.yalta.services.*
-import com.yalta.viewmodel.ChangePasswordViewModel
-import com.yalta.viewmodel.LoginViewModel
-import com.yalta.viewmodel.ProfileViewModel
 import dagger.Component
+import javax.inject.Singleton
 
 // Definition of a Dagger component
+@Singleton
 @Component(
     modules = [
         RepoModule::class,
