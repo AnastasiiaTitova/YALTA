@@ -3,14 +3,14 @@ package com.yalta.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yalta.services.LoginService
+import com.yalta.services.AuthService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
-    private val loginService: LoginService,
+    private val authService: AuthService,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -23,7 +23,7 @@ class LoginViewModel @Inject constructor(
     fun login() {
         showConnectionError.value = false
         viewModelScope.launch(dispatcher) {
-            val loggedIn = loginService.login(user.value!!, password.value!!)
+            val loggedIn = authService.login(user.value!!, password.value!!)
             when {
                 !loggedIn.isPresent -> {
                     showConnectionError()

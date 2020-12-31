@@ -2,7 +2,7 @@ package com.yalta.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.yalta.CoroutineTestRule
-import com.yalta.services.LoginService
+import com.yalta.services.AuthService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertFalse
@@ -16,7 +16,7 @@ import java.util.*
 @ExperimentalCoroutinesApi
 class LoginViewModelTest {
     private lateinit var viewModel: LoginViewModel
-    private val test = Mockito.mock(LoginService::class.java)
+    private val test = Mockito.mock(AuthService::class.java)
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()

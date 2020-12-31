@@ -1,10 +1,13 @@
 package com.yalta.services
 
 import com.yalta.repositories.*
+import common.User
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class LoginService @Inject constructor(private val repo: LoginRepo) {
+@Singleton
+class AuthService @Inject constructor(private val repo: AuthRepo) {
     suspend fun login(login: String, password: String): Optional<Boolean> {
         return process(
             { repo.login(login, password) },
@@ -20,6 +23,25 @@ class LoginService @Inject constructor(private val repo: LoginRepo) {
                     Optional.empty()
                 }
             }
+        )
+    }
+
+    suspend fun logout(): Boolean {
+        return process(
+            { repo.logout() },
+            {
+                SessionService.discardSession()
+                true
+            },
+            { false }
+        )
+    }
+
+    suspend fun getUser(): User? {
+        return process(
+            { repo.getUser() },
+            { it.user },
+            { null }
         )
     }
 }

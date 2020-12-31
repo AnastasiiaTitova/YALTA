@@ -14,17 +14,17 @@ class LogoutServiceUnitTest {
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
 
-    private val test = Mockito.mock(RealLogoutRepo::class.java)
+    private val test = Mockito.mock(RealAuthRepo::class.java)
 
     @Test
     fun logoutTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(test.logout()).thenReturn(LoggedOut())
-        assertTrue(LogoutService(test).logout())
+        assertTrue(AuthService(test).logout())
     }
 
     @Test
     fun doubleLogoutTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(test.logout()).thenReturn(FailedResponse(Reason.BAD_CODE))
-        assertFalse(LogoutService(test).logout())
+        assertFalse(AuthService(test).logout())
     }
 }

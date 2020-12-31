@@ -11,27 +11,27 @@ import org.junit.Test
 import org.mockito.Mockito
 
 @ExperimentalCoroutinesApi
-class LoginServiceUnitTest {
+class AuthServiceUnitTest {
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
 
-    private val test = Mockito.mock(RealLoginRepo::class.java)
+    private val test = Mockito.mock(RealAuthRepo::class.java)
 
     @Test
     fun correctCredentialsTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(test.login("root", "root")).thenReturn(SuccessfulLogin("token", Driver))
-        assertTrue(LoginService(test).login("root", "root").get())
+        assertTrue(AuthService(test).login("root", "root").get())
     }
 
     @Test
     fun wrongCredentialsTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(test.login("user", "password")).thenReturn(FailedResponse(Reason.BAD_CODE))
-        assertFalse(LoginService(test).login("user", "password").get())
+        assertFalse(AuthService(test).login("user", "password").get())
     }
 
     @Test
     fun connectionProblemTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(test.login("connection", "problem")).thenReturn(FailedResponse(Reason.FAILED_CONNECTION))
-        assertFalse(LoginService(test).login("connection", "problem").isPresent)
+        assertFalse(AuthService(test).login("connection", "problem").isPresent)
     }
 }

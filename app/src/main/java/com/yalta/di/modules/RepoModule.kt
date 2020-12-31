@@ -8,13 +8,7 @@ import dagger.Module
 abstract class RepoModule {
 
     @Binds
-    abstract fun bindLoginRepo(repo: RealLoginRepo): LoginRepo
-
-    @Binds
-    abstract fun bindUserRepo(repo: RealUserRepo): UserRepo
-
-    @Binds
-    abstract fun bindLogoutRepo(repo: RealLogoutRepo): LogoutRepo
+    abstract fun bindLoginRepo(repo: RealAuthRepo): AuthRepo
 
     @Binds
     abstract fun bindPointRepo(repo: RealPointRepo): PointRepo

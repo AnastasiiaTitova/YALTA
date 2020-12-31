@@ -24,7 +24,7 @@ class AddPointServiceUnitTest {
         val name = "name"
         val coordinate = 0.0
         Mockito.`when`(test.createNewPoint(name, coordinate, coordinate)).thenReturn(FailedResponse(Reason.BAD_CODE))
-        assertFalse(AddPointService(test).createNewPoint(name, coordinate, coordinate))
+        assertFalse(PointService(test).createNewPoint(name, coordinate, coordinate))
     }
 
     @Test
@@ -32,7 +32,7 @@ class AddPointServiceUnitTest {
         val name = "name1"
         val coordinate = 0.0
         Mockito.`when`(test.createNewPoint(name, coordinate, coordinate)).thenReturn(PointCreated())
-        assertTrue(AddPointService(test).createNewPoint(name, coordinate, coordinate))
+        assertTrue(PointService(test).createNewPoint(name, coordinate, coordinate))
     }
 
 }
