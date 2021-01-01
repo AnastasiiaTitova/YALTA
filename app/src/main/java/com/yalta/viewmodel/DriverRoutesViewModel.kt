@@ -50,8 +50,8 @@ class DriverRoutesViewModel @Inject constructor(
 
     private fun getSelectedRoutes(from: DateTime, to: DateTime) = viewModelScope.launch(dispatcher) {
         val result = routesService.getRoutes(from.toString(), to.toString())
-        if (result != null) {
-            setRoutes(result)
+        if (result.isPresent) {
+            setRoutes(result.get())
         }
     }
 

@@ -14,6 +14,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
+import java.util.*
 
 @ExperimentalCoroutinesApi
 class DriverRoutesViewModelTest {
@@ -35,14 +36,14 @@ class DriverRoutesViewModelTest {
 
     @Before
     fun setup() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.getRoutes(fromDate.toString(), toDate.toString())).thenReturn(listOf(route))
+        Mockito.`when`(test.getRoutes(fromDate.toString(), toDate.toString())).thenReturn(Optional.of(listOf(route)))
         viewModel = DriverRoutesViewModel(test, coroutinesTestRule.testDispatcher)
     }
 
     @Test
     fun successfulGetRoutes() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(test.getRoutes(fromDate.minusDays(1).toString(), toDate.minusDays(1).toString()))
-            .thenReturn(emptyList())
+            .thenReturn(Optional.of(emptyList()))
         viewModel.fromDate.value = fromDate.minusDays(1)
         viewModel.toDate.value = toDate.minusDays(1)
         viewModel.getSomeRoutes()
@@ -67,7 +68,7 @@ class DriverRoutesViewModelTest {
 
     @Test
     fun failedGetRoutesBadDates() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.getRoutes(fromDate.toString(), toDate.minusDays(1).toString())).thenReturn(listOf(route))
+        Mockito.`when`(test.getRoutes(fromDate.toString(), toDate.minusDays(1).toString())).thenReturn(Optional.of(listOf(route)))
         viewModel.fromDate.value = fromDate
         viewModel.toDate.value = toDate.minusDays(1)
         viewModel.getSomeRoutes()
@@ -77,7 +78,7 @@ class DriverRoutesViewModelTest {
 
     @Test
     fun failedGetRoutesBadResponse() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.getRoutes(fromDate.toString(), toDate.plusDays(1).toString())).thenReturn(null)
+        Mockito.`when`(test.getRoutes(fromDate.toString(), toDate.plusDays(1).toString())).thenReturn(Optional.empty())
         viewModel.fromDate.value = fromDate
         viewModel.toDate.value = toDate.plusDays(1)
         viewModel.getSomeRoutes()
@@ -109,7 +110,7 @@ class DriverRoutesViewModelTest {
 
     @Test
     fun changeSelectedValueWithPoints() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.getRoutes(fromDate.minusDays(2).toString(), toDate.toString())).thenReturn(listOf(routeWithPoint))
+        Mockito.`when`(test.getRoutes(fromDate.minusDays(2).toString(), toDate.toString())).thenReturn(Optional.of(listOf(routeWithPoint)))
 
         viewModel.fromDate.value = fromDate.minusDays(2)
         viewModel.toDate.value = toDate

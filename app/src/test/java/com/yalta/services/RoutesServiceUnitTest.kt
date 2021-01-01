@@ -23,7 +23,8 @@ class RoutesServiceUnitTest {
         Mockito.`when`(test.getRoutes("today", "today")).thenReturn(GotRoutes(emptyList()))
 
         val res = RoutesService(test).getRoutes("today", "today")
-        assertTrue(res!!.isEmpty())
+        assertTrue(res.isPresent)
+        assertTrue(res.get().isEmpty())
     }
 
     @Test
@@ -31,7 +32,7 @@ class RoutesServiceUnitTest {
         Mockito.`when`(test.getRoutes("tomorrow", "today")).thenReturn(FailedResponse(Reason.BAD_CODE))
 
         val res = RoutesService(test).getRoutes("tomorrow", "today")
-        assertTrue(res == null)
+        assertFalse(res.isPresent)
     }
 
     @Test
