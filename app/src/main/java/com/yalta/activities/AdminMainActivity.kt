@@ -49,7 +49,7 @@ class AdminMainActivity : AppCompatActivity() {
             currentFragment = fragment
             true
         }
-        navigation.selectedItemId = R.id.browse
+        navigation.selectedItemId = R.id.points
     }
 
     override fun onBackPressed() {}

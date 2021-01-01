@@ -34,4 +34,32 @@ class AuthServiceUnitTest {
         Mockito.`when`(test.login("connection", "problem")).thenReturn(FailedResponse(Reason.FAILED_CONNECTION))
         assertFalse(AuthService(test).login("connection", "problem").isPresent)
     }
+
+    @Test
+    fun logoutTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        Mockito.`when`(test.logout()).thenReturn(LoggedOut())
+        assertTrue(AuthService(test).logout())
+    }
+
+    @Test
+    fun doubleLogoutTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        Mockito.`when`(test.logout()).thenReturn(FailedResponse(Reason.BAD_CODE))
+        assertFalse(AuthService(test).logout())
+    }
+
+    @Test
+    fun getUserTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        Mockito.`when`(test.getUser()).thenReturn(GotUser(common.User(1, "user", "", Driver)))
+        val response = AuthService(test).getUser()
+        assertNotNull(response)
+        assertEquals(1L, response?.id)
+        assertEquals("user", response?.name)
+    }
+
+    @Test
+    fun failedGetUserTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        Mockito.`when`(test.getUser()).thenReturn(FailedResponse(Reason.BAD_CODE))
+        val response = AuthService(test).getUser()
+        assertNull(response)
+    }
 }
