@@ -34,13 +34,14 @@ class DriverRoutesViewModel @Inject constructor(
         var from = fromDate.value
         var to = toDate.value
         val timezone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Moscow"))
-        val now = DateTime.now()
 
-        from = from ?: DateTime(now.year, now.monthOfYear, now.dayOfMonth, 0, 0, timezone)
-        to = to ?: DateTime(now.year, now.monthOfYear, now.dayOfMonth, 23, 59, timezone)
+        from = from ?: DateTime.now(timezone)
+        from = from!!.withHourOfDay(0).withMinuteOfHour(0)
+        to = to ?: DateTime.now(timezone)
+        to = to!!.withHourOfDay(23).withMinuteOfHour(59)
 
         if (datesAreOk(from, to)) {
-            getSelectedRoutes(from, to)
+            getSelectedRoutes(from!!, to!!)
         } else {
             showDatesError(true)
         }
