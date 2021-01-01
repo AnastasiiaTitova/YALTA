@@ -2,7 +2,6 @@ package com.yalta.services
 
 import android.location.Location
 import com.yalta.repositories.*
-import common.Route
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,14 +11,6 @@ class LocationService @Inject constructor(private val repo: LocationRepo) {
         return process(
             { repo.sendCurrentLocation(location) },
             { it.location },
-            { null }
-        )
-    }
-
-    suspend fun getCurrentRoute(): Route? {
-        return process(
-            { repo.getCurrentRoute() },
-            { it.route },
             { null }
         )
     }

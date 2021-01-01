@@ -15,4 +15,12 @@ class RoutesService @Inject constructor(private val repo: RoutesRepo) {
             { null }
         )
     }
+
+    suspend fun getCurrentRoute(): Route? {
+        return process(
+            { repo.getCurrentRoute() },
+            { it.route },
+            { null }
+        )
+    }
 }

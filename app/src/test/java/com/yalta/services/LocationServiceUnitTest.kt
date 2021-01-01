@@ -3,7 +3,6 @@ package com.yalta.services
 import android.location.Location
 import com.yalta.CoroutineTestRule
 import com.yalta.repositories.*
-import common.Route
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.joda.time.DateTime
@@ -53,29 +52,6 @@ class LocationServiceUnitTest {
         Mockito.`when`(test.sendCurrentLocation(location))
             .thenReturn(FailedResponse(Reason.FAILED_CONNECTION))
         val response = LocationService(test).sendCurrentLocation(location)
-
-        assertNull(response)
-    }
-
-    @Test
-    fun getCurrentRouteTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        val route = Route(1,1, DateTime.now(), emptyList(), false)
-        Mockito.`when`(test.getCurrentRoute())
-            .thenReturn(GotRoute(route))
-        val response = LocationService(test).getCurrentRoute()
-
-        assertNotNull(response)
-        assertEquals(route.id, response?.id)
-        assertEquals(route.driverId, response?.driverId)
-        assertEquals(route.routeDate, response?.routeDate)
-        assertEquals(route.finished, response?.finished)
-    }
-
-    @Test
-    fun failedGetCurrentRouteTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.getCurrentRoute())
-            .thenReturn(FailedResponse(Reason.BAD_CODE))
-        val response = LocationService(test).getCurrentRoute()
 
         assertNull(response)
     }

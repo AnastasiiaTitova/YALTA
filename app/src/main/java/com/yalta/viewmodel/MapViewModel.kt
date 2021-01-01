@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.*
 import com.yalta.di.YaltaApplication
 import com.yalta.services.LocationService
+import com.yalta.services.RoutesService
 import common.Route
 import common.RoutePoint
 import kotlinx.coroutines.*
@@ -20,6 +21,7 @@ import javax.inject.Inject
 
 class MapViewModel @Inject constructor(
     private val locationService: LocationService,
+    private val routesService: RoutesService,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private var context: Context = YaltaApplication.context
@@ -75,7 +77,7 @@ class MapViewModel @Inject constructor(
     }
 
     private fun updateRoute() = viewModelScope.launch(dispatcher) {
-        _currentRoute = locationService.getCurrentRoute()
+        _currentRoute = routesService.getCurrentRoute()
         if (_currentRoute != null) {
             updatePoints(_currentRoute?.points!!)
         }

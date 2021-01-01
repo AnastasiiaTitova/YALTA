@@ -2,8 +2,10 @@ package com.yalta.services
 
 import com.yalta.CoroutineTestRule
 import com.yalta.repositories.*
+import common.Route
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.joda.time.DateTime
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
@@ -30,5 +32,28 @@ class RoutesServiceUnitTest {
 
         val res = RoutesService(test).getRoutes("tomorrow", "today")
         assertTrue(res == null)
+    }
+
+    @Test
+    fun getCurrentRouteTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        val route = Route(1,1, DateTime.now(), emptyList(), false)
+        Mockito.`when`(test.getCurrentRoute())
+            .thenReturn(GotRoute(route))
+        val response = RoutesService(test).getCurrentRoute()
+
+        assertNotNull(response)
+        assertEquals(route.id, response?.id)
+        assertEquals(route.driverId, response?.driverId)
+        assertEquals(route.routeDate, response?.routeDate)
+        assertEquals(route.finished, response?.finished)
+    }
+
+    @Test
+    fun failedGetCurrentRouteTest() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        Mockito.`when`(test.getCurrentRoute())
+            .thenReturn(FailedResponse(Reason.BAD_CODE))
+        val response = RoutesService(test).getCurrentRoute()
+
+        assertNull(response)
     }
 }
