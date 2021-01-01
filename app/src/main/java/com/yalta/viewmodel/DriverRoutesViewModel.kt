@@ -14,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
-import org.joda.time.format.DateTimeFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -22,8 +21,7 @@ class DriverRoutesViewModel @Inject constructor(
     private val routesService: RoutesService,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    var routes: List<Route>? = emptyList()
-    val routesNames = MutableLiveData<List<String>>()
+    var routes = MutableLiveData<List<Route>>(emptyList())
     var selectedRoute: Int? = null
     val selectedRoutePoints = MutableLiveData<List<UniversalRecyclerItem>>()
     val fromDate = MutableLiveData<DateTime>()
@@ -51,16 +49,14 @@ class DriverRoutesViewModel @Inject constructor(
         from != null && to != null && from <= to
 
     private fun getSelectedRoutes(from: DateTime, to: DateTime) = viewModelScope.launch(dispatcher) {
-        routes = routesService.getRoutes(from.toString(), to.toString())
-        if (routes != null) {
-            setRoutes()
+        val result = routesService.getRoutes(from.toString(), to.toString())
+        if (result != null) {
+            setRoutes(result)
         }
     }
 
-    private fun setRoutes() = viewModelScope.launch(Dispatchers.Main) {
-        routesNames.value = routes?.map { route ->
-            "ID: ${route.id} Date: ${route.routeDate.toString(DateTimeFormat.forPattern("dd-MM-yy HH:mm"))}"
-        }
+    private fun setRoutes(newRoutes: List<Route>) = viewModelScope.launch(Dispatchers.Main) {
+        routes.value = newRoutes
         selectedRouteChanged(null)
     }
 
@@ -69,7 +65,7 @@ class DriverRoutesViewModel @Inject constructor(
         if (newRoute == null) {
             selectedRoutePoints.value = emptyList()
         } else {
-            val route = routes?.elementAtOrNull(newRoute)
+            val route = routes.value?.elementAtOrNull(newRoute)
             selectedRoutePoints.value = route?.points?.map { routePoint ->
                 routePoint.toRecyclerItem()
             } ?: emptyList()

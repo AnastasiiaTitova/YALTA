@@ -18,6 +18,7 @@ import com.yalta.viewmodel.DriverRoutesViewModel
 import kotlinx.android.synthetic.main.fragment_driver_routes.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
+import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 
 class DriverRoutesFragment : Fragment() {
@@ -60,8 +61,11 @@ class DriverRoutesFragment : Fragment() {
             }
         }
 
-        viewModel.routesNames.observeForever { names ->
-            routesSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, names)
+        viewModel.routes.observeForever { routes ->
+            routesSpinner.adapter =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, routes.map { route ->
+                    "ID: ${route.id} Date: ${route.routeDate.toString(DateTimeFormat.forPattern("dd-MM-yy HH:mm"))}"
+                })
         }
 
         routesSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

@@ -48,8 +48,7 @@ class DriverRoutesViewModelTest {
         viewModel.getSomeRoutes()
 
         assertFalse(viewModel.showDatesError.value!!)
-        assertTrue(viewModel.routes?.size == 0)
-        assertTrue(viewModel.routesNames.value?.size == 0)
+        assertTrue(viewModel.routes.value?.size == 0)
         assertNull(viewModel.selectedRoute)
         assertTrue(viewModel.selectedRoutePoints.value!!.isEmpty())
     }
@@ -61,8 +60,7 @@ class DriverRoutesViewModelTest {
         viewModel.getSomeRoutes()
 
         assertFalse(viewModel.showDatesError.value!!)
-        assertTrue(viewModel.routes?.size == 1)
-        assertTrue(viewModel.routesNames.value?.size == 1)
+        assertTrue(viewModel.routes.value?.size == 1)
         assertNull(viewModel.selectedRoute)
         assertTrue(viewModel.selectedRoutePoints.value!!.isEmpty())
     }
