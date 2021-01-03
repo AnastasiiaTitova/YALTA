@@ -3,6 +3,7 @@ package com.yalta.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.yalta.CoroutineTestRule
 import com.yalta.services.RoutesService
+import com.yalta.services.StorageImpl
 import common.Point
 import common.Route
 import common.RoutePoint
@@ -20,6 +21,7 @@ import java.util.*
 class DriverRoutesViewModelTest {
     private lateinit var viewModel: DriverRoutesViewModel
     private val test = Mockito.mock(RoutesService::class.java)
+    private val storage = StorageImpl()
     private val route = Route(1, 1, DateTime.now(), emptyList(), false)
     private val routeWithPoint =
         Route(1, 1, DateTime.now(), listOf(RoutePoint(1, Point(1, 1.0, 1.0, "first"), false, 1)), false)
@@ -37,7 +39,7 @@ class DriverRoutesViewModelTest {
     @Before
     fun setup() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(test.getRoutes(fromDate.toString(), toDate.toString())).thenReturn(Optional.of(listOf(route)))
-        viewModel = DriverRoutesViewModel(test, coroutinesTestRule.testDispatcher)
+        viewModel = DriverRoutesViewModel(test, storage, coroutinesTestRule.testDispatcher)
     }
 
     @Test
@@ -49,7 +51,7 @@ class DriverRoutesViewModelTest {
         viewModel.getSomeRoutes()
 
         assertFalse(viewModel.showDatesError.value!!)
-        assertTrue(viewModel.routes.value?.size == 0)
+        assertTrue(viewModel.storage.routes.value?.size == 0)
         assertNull(viewModel.selectedRoute)
         assertTrue(viewModel.selectedRoutePoints.value!!.isEmpty())
     }
@@ -61,7 +63,7 @@ class DriverRoutesViewModelTest {
         viewModel.getSomeRoutes()
 
         assertFalse(viewModel.showDatesError.value!!)
-        assertTrue(viewModel.routes.value?.size == 1)
+        assertTrue(viewModel.storage.routes.value?.size == 1)
         assertNull(viewModel.selectedRoute)
         assertTrue(viewModel.selectedRoutePoints.value!!.isEmpty())
     }

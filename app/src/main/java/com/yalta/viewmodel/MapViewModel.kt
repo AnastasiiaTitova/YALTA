@@ -12,6 +12,7 @@ import com.google.android.gms.location.*
 import com.yalta.di.YaltaApplication
 import com.yalta.services.LocationService
 import com.yalta.services.RoutesService
+import com.yalta.services.Storage
 import common.Route
 import common.RoutePoint
 import kotlinx.coroutines.*
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class MapViewModel @Inject constructor(
     private val locationService: LocationService,
     private val routesService: RoutesService,
+    private val storage: Storage,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private var context: Context = YaltaApplication.context
@@ -85,6 +87,7 @@ class MapViewModel @Inject constructor(
 
     private fun updatePoints(points: List<RoutePoint>) = viewModelScope.launch(Dispatchers.Main) {
         _points.value = points
+        storage.update(_currentRoute!!)
     }
 
     private fun calculateDistance(point: RoutePoint, currentLocation: Location): Float {
