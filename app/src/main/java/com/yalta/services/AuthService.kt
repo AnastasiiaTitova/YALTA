@@ -7,7 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AuthService @Inject constructor(private val repo: AuthRepo) {
+class AuthService @Inject constructor(private val repo: AuthRepo, private val storage: Storage) {
     suspend fun login(login: String, password: String): Optional<Boolean> {
         return process(
             { repo.login(login, password) },
@@ -30,6 +30,7 @@ class AuthService @Inject constructor(private val repo: AuthRepo) {
         return process(
             { repo.logout() },
             {
+                storage.clearData()
                 SessionService.discardSession()
                 true
             },

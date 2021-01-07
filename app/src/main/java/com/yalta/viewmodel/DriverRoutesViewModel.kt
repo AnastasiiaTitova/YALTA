@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yalta.R
 import com.yalta.services.RoutesService
+import com.yalta.services.Storage
 import com.yalta.utils.UniversalRecyclerItem
 import common.Route
 import common.RoutePoint
@@ -19,14 +20,22 @@ import javax.inject.Inject
 
 class DriverRoutesViewModel @Inject constructor(
     private val routesService: RoutesService,
+    val storage: Storage,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    var routes = MutableLiveData<List<Route>>(emptyList())
     var selectedRoute: Int? = null
     val selectedRoutePoints = MutableLiveData<List<UniversalRecyclerItem>>()
     val fromDate = MutableLiveData<DateTime>()
     val toDate = MutableLiveData<DateTime>()
     val showDatesError = MutableLiveData(false)
+
+    init {
+        storage.routes.observeForever { routes ->
+            if (routes.isEmpty()) {
+                selectedRouteChanged(selectedRoute)
+            }
+        }
+    }
 
     fun getSomeRoutes() {
         var from = fromDate.value
@@ -56,8 +65,7 @@ class DriverRoutesViewModel @Inject constructor(
     }
 
     private fun setRoutes(newRoutes: List<Route>) = viewModelScope.launch(Dispatchers.Main) {
-        routes.value = newRoutes
-        selectedRouteChanged(null)
+        storage.routes.value = newRoutes
     }
 
     fun selectedRouteChanged(newRoute: Int?) {
@@ -65,7 +73,7 @@ class DriverRoutesViewModel @Inject constructor(
         if (newRoute == null) {
             selectedRoutePoints.value = emptyList()
         } else {
-            val route = routes.value?.elementAtOrNull(newRoute)
+            val route = storage.routes.value?.elementAtOrNull(newRoute)
             selectedRoutePoints.value = route?.points?.map { routePoint ->
                 routePoint.toRecyclerItem()
             } ?: emptyList()
