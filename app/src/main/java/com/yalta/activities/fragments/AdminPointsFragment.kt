@@ -66,7 +66,6 @@ class AdminPointsFragment : Fragment() {
         pointSearchField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
                 pointSearchField.clearFocus()
-                recyclerView.requestFocus()
                 hideKeyboard()
                 true
             } else {

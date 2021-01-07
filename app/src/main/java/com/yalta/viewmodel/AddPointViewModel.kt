@@ -5,6 +5,8 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.yalta.di.YaltaApplication
 import com.yalta.services.PointService
@@ -18,6 +20,7 @@ class AddPointViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher
 ): ViewModel() {
     private var context: Context = YaltaApplication.context
+    private var fusedLocationProviderClient: FusedLocationProviderClient
 
     val pointName = MutableLiveData<String>()
     val pointLat = MutableLiveData<String>()
@@ -26,6 +29,10 @@ class AddPointViewModel @Inject constructor(
     val showEmptyFieldError = MutableLiveData(false)
     val showConnectionError = MutableLiveData(false)
     val closeActivity = MutableLiveData(false)
+
+    init {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+    }
 
     fun createNewPoint() {
         showConnectionError(false)
@@ -63,13 +70,13 @@ class AddPointViewModel @Inject constructor(
 
     @SuppressLint("MissingPermission")
     fun setCurrentLocation() {
-        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
-        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                pointLat.value = location.latitude.toString()
-                pointLon.value = location.longitude.toString()
+        fusedLocationProviderClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
+            .addOnSuccessListener { location ->
+                if (location != null) {
+                    pointLat.value = location.latitude.toString()
+                    pointLon.value = location.longitude.toString()
+                }
             }
-        }
     }
 
     private fun closeActivity() = viewModelScope.launch(Dispatchers.Main) {
