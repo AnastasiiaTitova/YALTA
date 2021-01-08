@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.yalta.viewmodel.MapViewModel" />
+            type="com.yalta.viewModel.MapViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

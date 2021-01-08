@@ -1,4 +1,4 @@
-package com.yalta.viewmodel
+package com.yalta.viewModel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.yalta.CoroutineTestRule

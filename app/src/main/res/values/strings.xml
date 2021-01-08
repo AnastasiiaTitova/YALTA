@@ -27,4 +27,6 @@
     <string name="set_current_location">Set current location</string>
     <string name="fields_can_not_be_empty">Fields can not be empty</string>
     <string name="dates_error">Selected From date is later than To date</string>
+    <string name="select_date_range_for_routes">Select date range for routes</string>
+    <string name="point_state">Point state</string>
 </resources>

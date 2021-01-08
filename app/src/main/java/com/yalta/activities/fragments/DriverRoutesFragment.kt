@@ -14,7 +14,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.yalta.R
 import com.yalta.databinding.FragmentDriverRoutesBinding
 import com.yalta.di.YaltaApplication
-import com.yalta.viewmodel.DriverRoutesViewModel
+import com.yalta.viewModel.DriverRoutesViewModel
 import kotlinx.android.synthetic.main.fragment_driver_routes.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
@@ -52,7 +52,7 @@ class DriverRoutesFragment : Fragment() {
                 .dateRangePicker()
                 .setTheme(R.style.DatePickerStyle)
                 .build()
-            picker.show(requireFragmentManager(), picker.toString())
+            picker.show(requireActivity().supportFragmentManager, picker.toString())
 
             picker.addOnPositiveButtonClickListener {
                 viewModel.fromDate.value = DateTime(it.first, timeZone)
@@ -67,7 +67,7 @@ class DriverRoutesFragment : Fragment() {
                     "ID: ${route.id} Date: ${route.routeDate.toString(DateTimeFormat.forPattern("dd-MM-yy HH:mm"))}"
                 })
             val selection = viewModel.selectedRoute
-            if (selection != null) {
+            if (selection != null && selection < viewModel.storage.routes.value?.size!!) {
                 routesSpinner.setSelection(selection)
             }
         }

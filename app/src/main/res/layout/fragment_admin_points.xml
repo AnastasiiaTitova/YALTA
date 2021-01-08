@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="viewmodel"
-            type="com.yalta.viewmodel.AdminPointsViewModel" />
+            name="viewModel"
+            type="com.yalta.viewModel.AdminPointsViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,6 +27,7 @@
 
         <EditText
             android:id="@+id/pointSearchField"
+            android:importantForAutofill="no"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:focusable="true"
@@ -35,7 +36,7 @@
             android:hint="@string/search"
             android:inputType="text"
             android:maxLines="1"
-            android:text="@={viewmodel.search}"
+            android:text="@={viewModel.search}"
             app:layout_constrainedWidth="true"
             app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
             app:layout_constraintRight_toLeftOf="@id/guidelineRight"
@@ -55,7 +56,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="0dp"
-                app:items="@{viewmodel.points}"
+                app:items="@{viewModel.points}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constrainedWidth="true"
                 app:layout_constrainedHeight="true"

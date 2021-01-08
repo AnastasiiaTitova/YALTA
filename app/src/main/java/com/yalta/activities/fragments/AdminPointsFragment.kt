@@ -10,14 +10,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.yalta.R
 import com.yalta.activities.AddPointActivity
 import com.yalta.databinding.FragmentAdminPointsBinding
 import com.yalta.di.YaltaApplication
 import com.yalta.utils.ViewUtils.hideKeyboard
-import com.yalta.viewmodel.AdminPointsViewModel
+import com.yalta.viewModel.AdminPointsViewModel
 import kotlinx.android.synthetic.main.fragment_admin_points.*
 import javax.inject.Inject
 
@@ -34,7 +33,7 @@ class AdminPointsFragment : Fragment() {
 
         YaltaApplication.appComponent.inject(this)
 
-        binding.viewmodel = viewModel
+        binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
         binding.recyclerView.addItemDecoration(DividerItemDecoration(context, HORIZONTAL))
@@ -60,7 +59,7 @@ class AdminPointsFragment : Fragment() {
         }
 
         pointSearchField.addTextChangedListener {
-            binding.viewmodel?.filterPoints()
+            binding.viewModel?.filterPoints()
         }
 
         pointSearchField.setOnEditorActionListener { _, actionId, _ ->

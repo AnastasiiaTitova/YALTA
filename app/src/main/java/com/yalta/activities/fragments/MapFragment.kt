@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,7 +19,7 @@ import com.yalta.databinding.FragmentMapBinding
 import com.yalta.di.YaltaApplication
 import com.yalta.utils.MapUtils.convertToMarkerOptions
 import com.yalta.utils.ViewUtils.grantedLocationPermission
-import com.yalta.viewmodel.MapViewModel
+import com.yalta.viewModel.MapViewModel
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
