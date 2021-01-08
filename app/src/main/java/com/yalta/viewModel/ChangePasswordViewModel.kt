@@ -1,4 +1,4 @@
-package com.yalta.viewmodel
+package com.yalta.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

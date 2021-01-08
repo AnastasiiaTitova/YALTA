@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.yalta.R
 import com.yalta.activities.ChangePasswordActivity
 import com.yalta.activities.LoginActivity
 import com.yalta.databinding.FragmentProfileBinding
 import com.yalta.di.YaltaApplication
-import com.yalta.viewmodel.ProfileViewModel
+import com.yalta.viewModel.ProfileViewModel
 import javax.inject.Inject
 
 class ProfileFragment : Fragment() {

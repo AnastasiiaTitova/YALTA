@@ -11,7 +11,7 @@ import com.yalta.databinding.ActivityAddPointBinding
 import com.yalta.di.YaltaApplication
 import com.yalta.utils.ViewUtils.grantedLocationPermission
 import com.yalta.utils.ViewUtils.hideKeyboard
-import com.yalta.viewmodel.AddPointViewModel
+import com.yalta.viewModel.AddPointViewModel
 import kotlinx.android.synthetic.main.activity_add_point.*
 import javax.inject.Inject
 

@@ -8,7 +8,7 @@
         <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="com.yalta.viewmodel.AddPointViewModel" />
+            type="com.yalta.viewModel.AddPointViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,6 +52,7 @@
 
                 <EditText
                     android:id="@+id/pointNameField"
+                    android:importantForAutofill="no"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:focusable="true"
@@ -70,6 +71,7 @@
 
                 <EditText
                     android:id="@+id/pointLatitudeField"
+                    android:importantForAutofill="no"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:focusable="true"
@@ -88,6 +90,7 @@
 
                 <EditText
                     android:id="@+id/pointLongitudeField"
+                    android:importantForAutofill="no"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:focusable="true"

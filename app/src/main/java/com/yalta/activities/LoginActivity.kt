@@ -6,13 +6,12 @@ import android.os.Bundle
 import android.text.Selection
 import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.yalta.R
 import com.yalta.databinding.ActivityLoginBinding
 import com.yalta.di.YaltaApplication
 import com.yalta.services.*
 import com.yalta.utils.ViewUtils.hideKeyboard
-import com.yalta.viewmodel.LoginViewModel
+import com.yalta.viewModel.LoginViewModel
 import common.Admin
 import common.Driver
 import kotlinx.android.synthetic.main.activity_login.*

@@ -3,7 +3,7 @@
     <data>
         <variable
             name="routePoint"
-            type="com.yalta.viewmodel.RoutePointDetails" />
+            type="com.yalta.viewModel.RoutePointDetails" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,6 +13,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:contentDescription="@string/point_state"
             android:id="@+id/state"
             android:layout_width="30dp"
             android:layout_height="30dp"

@@ -7,12 +7,11 @@ import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.yalta.R
 import com.yalta.databinding.ActivityChangePasswordBinding
 import com.yalta.di.YaltaApplication
 import com.yalta.utils.ViewUtils.hideKeyboard
-import com.yalta.viewmodel.ChangePasswordViewModel
+import com.yalta.viewModel.ChangePasswordViewModel
 import kotlinx.android.synthetic.main.activity_change_password.*
 import javax.inject.Inject
 

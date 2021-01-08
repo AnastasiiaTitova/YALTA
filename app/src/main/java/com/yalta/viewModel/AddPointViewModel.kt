@@ -1,4 +1,4 @@
-package com.yalta.viewmodel
+package com.yalta.viewModel
 
 import android.annotation.SuppressLint
 import android.content.Context

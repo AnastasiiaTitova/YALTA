@@ -16,7 +16,7 @@ class AdminMainActivity : AppCompatActivity() {
     lateinit var pointsFragment: AdminPointsFragment
     @Inject
     lateinit var profileFragment: ProfileFragment
-    lateinit var currentFragment: Fragment
+    private lateinit var currentFragment: Fragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
