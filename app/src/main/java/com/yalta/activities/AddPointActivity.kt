@@ -1,9 +1,13 @@
 package com.yalta.activities
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import com.yalta.R
@@ -28,7 +32,13 @@ class AddPointActivity : AppCompatActivity() {
 
         YaltaApplication.appComponent.inject(this)
 
-        viewModel.isCurrentPositionEnabled.value = grantedLocationPermission()
+        viewModel.arePermissionsGranted = { grantedLocationPermission() }
+        viewModel.requestPermissions = {
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                1
+            )
+        }
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
@@ -55,6 +65,19 @@ class AddPointActivity : AppCompatActivity() {
         binding.viewModel?.closeActivity?.observeForever { closeActivity ->
             if (closeActivity) {
                 closeActivity()
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
+                grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                permissions[1] == Manifest.permission.ACCESS_COARSE_LOCATION
+            ) {
+                viewModel.setCurrentLocation()
             }
         }
     }

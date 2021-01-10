@@ -97,7 +97,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         } else {
             viewModel.locationPermissionsGranted.value = false
             setLocationButtonEnabled(false)
-            requestPermissions()
         }
     }
 
@@ -107,27 +106,5 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         map?.isMyLocationEnabled = state
     }
 
-    private fun requestPermissions() {
-        requestPermissions(
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-            1
-        )
-    }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (requestCode == 1) {
-            if (grantResults.isNotEmpty() &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
-                grantResults[1] == PackageManager.PERMISSION_GRANTED &&
-                permissions[1] == Manifest.permission.ACCESS_COARSE_LOCATION
-            ) {
-                viewModel.locationPermissionsGranted.value = true
-                setLocationButtonEnabled(true)
-            }
-        } else {
-            viewModel.locationPermissionsGranted.value = false
-            setLocationButtonEnabled(false)
-        }
-    }
 }

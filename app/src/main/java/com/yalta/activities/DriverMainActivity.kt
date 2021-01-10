@@ -1,5 +1,7 @@
 package com.yalta.activities
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -36,6 +38,7 @@ class DriverMainActivity : AppCompatActivity() {
         mapFragment = if (grantedLocationPermission()) {
             MapFragment()
         } else {
+            requestPermissions()
             BlankFragment()
         }
 
@@ -65,5 +68,32 @@ class DriverMainActivity : AppCompatActivity() {
         navigation.selectedItemId = R.id.routes
     }
 
+    private fun requestPermissions() {
+        requestPermissions(
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+            1
+        )
+    }
+
     override fun onBackPressed() {}
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
+                grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                permissions[1] == Manifest.permission.ACCESS_COARSE_LOCATION
+            ) {
+                supportFragmentManager.beginTransaction()
+                    .remove(mapFragment)
+                    .commit()
+                mapFragment = MapFragment()
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.container, mapFragment)
+                    .hide(mapFragment)
+                    .commit()
+            }
+        }
+    }
 }
