@@ -17,7 +17,7 @@ class AdminPointsViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     val points = MutableLiveData<List<UniversalRecyclerItem>>()
-    private val allPoints = mutableListOf<common.Point>()
+    val allPoints = mutableListOf<common.Point>()
     val search = MutableLiveData<String>()
     val pointsUpdated = MutableLiveData(false)
 
@@ -26,7 +26,7 @@ class AdminPointsViewModel @Inject constructor(
     }
 
     private fun getAllPoints() = viewModelScope.launch(dispatcher) {
-        val receivedPoints = pointService.getAllPoints()
+        val receivedPoints = pointService.getAllPoints().sortedBy { point -> point.id }
         allPoints.clear()
         allPoints.addAll(receivedPoints)
         updateUIPoints(allPoints)

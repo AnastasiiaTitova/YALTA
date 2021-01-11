@@ -13,8 +13,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.yalta.R
 import com.yalta.activities.AddPointActivity
+import com.yalta.activities.ChangePointActivity
 import com.yalta.databinding.FragmentAdminPointsBinding
 import com.yalta.di.YaltaApplication
+import com.yalta.utils.RecyclerItemClickListener
 import com.yalta.utils.ViewUtils.hideKeyboard
 import com.yalta.viewModel.AdminPointsViewModel
 import kotlinx.android.synthetic.main.fragment_admin_points.*
@@ -47,6 +49,24 @@ class AdminPointsFragment : Fragment() {
 
         pointSearchField.clearFocus()
         recyclerView.requestFocus()
+
+        recyclerView.addOnItemTouchListener(
+            RecyclerItemClickListener(
+                recyclerView,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {}
+
+                    override fun onLongItemClick(child: View, position: Int) {
+                        val item = viewModel.allPoints[position]
+                        val intent = Intent(activity, ChangePointActivity::class.java)
+                        intent.putExtra("id", item.id)
+                        intent.putExtra("name", item.name)
+                        intent.putExtra("lat", item.lat)
+                        intent.putExtra("lon", item.lon)
+                        startActivity(intent)
+                    }
+                })
+        )
 
         viewModel.pointsUpdated.observeForever { pointsUpdated ->
             if (pointsUpdated) {

@@ -31,4 +31,5 @@
     <string name="point_state">Состояние точки</string>
     <string name="formatted_username">Имя: %s</string>
     <string name="formatted_role">Роль: %s</string>
+    <string name="update_point">Изменить точку</string>
 </resources>

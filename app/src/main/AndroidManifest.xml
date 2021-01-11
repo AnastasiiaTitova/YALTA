@@ -20,6 +20,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.ChangePasswordActivity" android:screenOrientation="portrait" />
         <activity android:name=".activities.AddPointActivity" android:screenOrientation="portrait" />
+        <activity android:name=".activities.ChangePointActivity" android:screenOrientation="portrait" />
         <activity android:name="com.yalta.activities.LoginActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
