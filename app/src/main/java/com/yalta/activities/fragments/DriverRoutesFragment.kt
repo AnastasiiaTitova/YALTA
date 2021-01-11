@@ -64,7 +64,7 @@ class DriverRoutesFragment : Fragment() {
         viewModel.storage.routes.observeForever { routes ->
             routesSpinner.adapter =
                 ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, routes.map { route ->
-                    "ID: ${route.id} Date: ${route.routeDate.toString(DateTimeFormat.forPattern("dd-MM-yy HH:mm"))}"
+                    "ID: ${route.id} Date: ${route.routeDate.toString(DateTimeFormat.forPattern("dd-MM-yy"))}"
                 })
             val selection = viewModel.selectedRoute
             if (selection != null && selection < viewModel.storage.routes.value?.size!!) {
