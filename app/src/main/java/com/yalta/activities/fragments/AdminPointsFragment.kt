@@ -63,7 +63,7 @@ class AdminPointsFragment : Fragment() {
                         intent.putExtra("name", item.name)
                         intent.putExtra("lat", item.lat)
                         intent.putExtra("lon", item.lon)
-                        startActivity(intent)
+                        startActivityForResult(intent, 1)
                     }
                 })
         )
@@ -93,7 +93,11 @@ class AdminPointsFragment : Fragment() {
         }
 
         floatingAddPointButton.setOnClickListener {
-            startActivity(Intent(activity, AddPointActivity::class.java))
+            startActivityForResult(Intent(activity, AddPointActivity::class.java), 1)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        viewModel.updatePoints()
     }
 }

@@ -1,6 +1,7 @@
 package com.yalta.activities
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.animation.DecelerateInterpolator
@@ -104,6 +105,7 @@ class ChangePointActivity : AppCompatActivity() {
             DecelerateInterpolator()
         ).start()
 
+        setResult(1, Intent())
         finish()
         overridePendingTransition(0, 0)
     }
