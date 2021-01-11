@@ -27,7 +27,7 @@ class DriverRoutesViewModel @Inject constructor(
     val selectedRoutePoints = MutableLiveData<List<UniversalRecyclerItem>>()
     val fromDate = MutableLiveData<DateTime>()
     val toDate = MutableLiveData<DateTime>()
-    val showDatesError = MutableLiveData(false)
+    val isRouteCurrent = MutableLiveData(false)
 
     private val timezone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Moscow"))
 
@@ -52,15 +52,8 @@ class DriverRoutesViewModel @Inject constructor(
         to = to ?: DateTime.now(timezone)
         to = to!!.withHourOfDay(23).withMinuteOfHour(59)
 
-        if (datesAreOk(from, to)) {
-            getSelectedRoutes(from!!, to!!)
-        } else {
-            showDatesError(true)
-        }
+        getSelectedRoutes(from!!, to!!)
     }
-
-    private fun datesAreOk(from: DateTime?, to: DateTime?): Boolean =
-        from != null && to != null && from <= to
 
     private fun getSelectedRoutes(from: DateTime, to: DateTime) = viewModelScope.launch(dispatcher) {
         val result = routesService.getRoutes(from.toString(), to.toString())
@@ -77,8 +70,12 @@ class DriverRoutesViewModel @Inject constructor(
         selectedRoute = newRoute
         if (newRoute == null) {
             selectedRoutePoints.value = emptyList()
+            isRouteCurrent.value = false
         } else {
             val route = storage.routes.value?.elementAtOrNull(newRoute)
+
+            isRouteCurrent.value = isRouteDateNow(route)
+
             selectedRoutePoints.value = route?.points?.map { routePoint ->
                 routePoint.toRecyclerItem()
             } ?: emptyList()
@@ -88,6 +85,11 @@ class DriverRoutesViewModel @Inject constructor(
         }
     }
 
+    fun isRouteDateNow(route: Route?): Boolean =
+        route?.routeDate?.withTimeAtStartOfDay()
+            ?.isEqual(DateTime.now().withTimeAtStartOfDay())
+            ?: false
+
     private fun RoutePoint.toRecyclerItem() =
         UniversalRecyclerItem(
             RoutePointDetails(point.name, if (visited) R.drawable.ic_check else R.drawable.ic_run),
@@ -95,9 +97,6 @@ class DriverRoutesViewModel @Inject constructor(
             BR.routePoint
         )
 
-    fun showDatesError(value: Boolean) = viewModelScope.launch(Dispatchers.Main) {
-        showDatesError.value = value
-    }
 }
 
 data class RoutePointDetails(val name: String, val image: Int)

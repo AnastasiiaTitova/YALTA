@@ -50,7 +50,6 @@ class DriverRoutesViewModelTest {
         viewModel.toDate.value = toDate.minusDays(1)
         viewModel.getSomeRoutes()
 
-        assertFalse(viewModel.showDatesError.value!!)
         assertTrue(viewModel.storage.routes.value?.size == 0)
         assertNull(viewModel.selectedRoute)
         assertTrue(viewModel.selectedRoutePoints.value!!.isEmpty())
@@ -62,21 +61,10 @@ class DriverRoutesViewModelTest {
         viewModel.toDate.value = toDate
         viewModel.getSomeRoutes()
 
-        assertFalse(viewModel.showDatesError.value!!)
+        assertFalse(viewModel.isRouteCurrent.value!!)
         assertTrue(viewModel.storage.routes.value?.size == 1)
         assertNull(viewModel.selectedRoute)
         assertTrue(viewModel.selectedRoutePoints.value!!.isEmpty())
-    }
-
-    @Test
-    fun failedGetRoutesBadDates() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        Mockito.`when`(test.getRoutes(fromDate.toString(), toDate.minusDays(1).toString()))
-            .thenReturn(Optional.of(listOf(route)))
-        viewModel.fromDate.value = fromDate
-        viewModel.toDate.value = toDate.minusDays(1)
-        viewModel.getSomeRoutes()
-
-        assertTrue(viewModel.showDatesError.value!!)
     }
 
     @Test
@@ -85,8 +73,6 @@ class DriverRoutesViewModelTest {
         viewModel.fromDate.value = fromDate
         viewModel.toDate.value = toDate.plusDays(1)
         viewModel.getSomeRoutes()
-
-        assertFalse(viewModel.showDatesError.value!!)
     }
 
     @Test

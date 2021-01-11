@@ -26,7 +26,7 @@
     <string name="create_point">Создать точку</string>
     <string name="set_current_location">Текущая локация</string>
     <string name="fields_can_not_be_empty">Поля не могут быть пустыми</string>
-    <string name="dates_error">Выбранная дата До позже, чем дата От</string>
+    <string name="current_route_marker">Данный маршрут исполняется</string>
     <string name="select_date_range_for_routes">Выберите интервал дат для маршрутов</string>
     <string name="point_state">Состояние точки</string>
     <string name="formatted_username">Имя: %s</string>
