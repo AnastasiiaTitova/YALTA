@@ -23,4 +23,20 @@ class PointService @Inject constructor(private val repo: PointRepo) {
             { false }
         )
     }
+
+    suspend fun updatePointName(id: Long, name: String, lat: Double, lon: Double): Boolean {
+        return process(
+            { repo.updatePointName(id, name, lat, lon) },
+            { true },
+            { false }
+        )
+    }
+
+    suspend fun updatePointPosition(id: Long, name: String, lat: Double, lon: Double): Boolean {
+        return process(
+            { repo.updatePointPosition(id, name, lat, lon) },
+            { true },
+            { false }
+        )
+    }
 }

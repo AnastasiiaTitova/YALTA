@@ -34,4 +34,5 @@ interface AppComponent {
 
     fun inject(activity: ChangePasswordActivity)
     fun inject(activity: AddPointActivity)
+    fun inject(activity: ChangePointActivity)
 }

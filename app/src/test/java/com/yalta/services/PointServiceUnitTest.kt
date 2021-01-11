@@ -55,4 +55,40 @@ class PointServiceUnitTest {
         Mockito.`when`(test.createNewPoint(name, coordinate, coordinate)).thenReturn(PointCreated())
         Assert.assertTrue(PointService(test).createNewPoint(name, coordinate, coordinate))
     }
+
+    @Test
+    fun failedUpdatePointName() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        val id = 1L
+        val name = "name"
+        val coordinate = 0.0
+        Mockito.`when`(test.updatePointName(id, name, coordinate, coordinate)).thenReturn(FailedResponse(Reason.BAD_CODE))
+        Assert.assertFalse(PointService(test).updatePointName(id, name, coordinate, coordinate))
+    }
+
+    @Test
+    fun successfulUpdatePointName() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        val id = 1L
+        val name = "name1"
+        val coordinate = 0.0
+        Mockito.`when`(test.updatePointName(id, name, coordinate, coordinate)).thenReturn(PointUpdated())
+        Assert.assertTrue(PointService(test).updatePointName(id, name, coordinate, coordinate))
+    }
+
+    @Test
+    fun failedUpdatePointPosition() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        val id = 1L
+        val name = "name"
+        val coordinate = 0.0
+        Mockito.`when`(test.updatePointPosition(id, name, coordinate, coordinate)).thenReturn(FailedResponse(Reason.BAD_CODE))
+        Assert.assertFalse(PointService(test).updatePointPosition(id, name, coordinate, coordinate))
+    }
+
+    @Test
+    fun successfulUpdatePointPosition() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        val id = 1L
+        val name = "name1"
+        val coordinate = 0.0
+        Mockito.`when`(test.updatePointPosition(id, name, coordinate, coordinate)).thenReturn(PointUpdated())
+        Assert.assertTrue(PointService(test).updatePointPosition(id, name, coordinate, coordinate))
+    }
 }
