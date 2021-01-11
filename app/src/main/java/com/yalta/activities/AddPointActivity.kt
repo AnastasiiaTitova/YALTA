@@ -1,13 +1,12 @@
 package com.yalta.activities
 
 import android.Manifest
-import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import com.yalta.R
@@ -93,6 +92,7 @@ class AddPointActivity : AppCompatActivity() {
             DecelerateInterpolator()
         ).start()
 
+        setResult(1, Intent())
         finish()
         overridePendingTransition(0, 0)
     }
