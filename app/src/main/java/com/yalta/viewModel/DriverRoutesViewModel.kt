@@ -32,15 +32,15 @@ class DriverRoutesViewModel @Inject constructor(
     private val timezone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Moscow"))
 
     init {
-        getSelectedRoutes(
-            DateTime.now(timezone).withHourOfDay(0).withMinuteOfHour(0),
-            DateTime.now(timezone).plusDays(7).withHourOfDay(23).withMinuteOfHour(59)
-        )
         storage.routes.observeForever { routes ->
             if (routes.isEmpty()) {
                 selectedRouteChanged(selectedRoute)
             }
         }
+        getSelectedRoutes(
+            DateTime.now(timezone).withHourOfDay(0).withMinuteOfHour(0),
+            DateTime.now(timezone).plusDays(7).withHourOfDay(23).withMinuteOfHour(59)
+        )
     }
 
     fun getSomeRoutes() {
