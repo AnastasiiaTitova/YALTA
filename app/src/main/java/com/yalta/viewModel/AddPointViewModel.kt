@@ -1,5 +1,6 @@
 package com.yalta.viewModel
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
@@ -18,20 +19,27 @@ import javax.inject.Inject
 class AddPointViewModel @Inject constructor(
     private val pointService: PointService,
     private val dispatcher: CoroutineDispatcher
-): ViewModel() {
+) : ViewModel() {
     private var context: Context = YaltaApplication.context
-    private var fusedLocationProviderClient: FusedLocationProviderClient
+    private var fusedLocationProviderClient: FusedLocationProviderClient?
+    var arePermissionsGranted: () -> Boolean = { false }
+    var requestPermissions: () -> Unit = { }
 
     val pointName = MutableLiveData<String>()
     val pointLat = MutableLiveData<String>()
     val pointLon = MutableLiveData<String>()
-    val isCurrentPositionEnabled = MutableLiveData(false)
+    val isCurrentPositionEnabled = MutableLiveData(true)
     val showEmptyFieldError = MutableLiveData(false)
     val showConnectionError = MutableLiveData(false)
     val closeActivity = MutableLiveData(false)
 
     init {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+        fusedLocationProviderClient =
+            if (arePermissionsGranted()) {
+                getLocationProvider()
+            } else {
+                null
+            }
     }
 
     fun createNewPoint() {
@@ -68,10 +76,19 @@ class AddPointViewModel @Inject constructor(
         showConnectionError.value = value
     }
 
+    fun getLocationProvider(): FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+
     @SuppressLint("MissingPermission")
     fun setCurrentLocation() {
-        fusedLocationProviderClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
-            .addOnSuccessListener { location ->
+        if (!arePermissionsGranted()) {
+            requestPermissions()
+            return
+        }
+        if (fusedLocationProviderClient == null) {
+            fusedLocationProviderClient = getLocationProvider()
+        }
+        fusedLocationProviderClient?.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
+            ?.addOnSuccessListener { location ->
                 if (location != null) {
                     pointLat.value = location.latitude.toString()
                     pointLon.value = location.longitude.toString()
