@@ -9,14 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 
 import com.yalta.R
 import com.yalta.databinding.FragmentMapBinding
 import com.yalta.di.YaltaApplication
+import com.yalta.utils.MapUtils.convertToBounds
 import com.yalta.utils.MapUtils.convertToMarkerOptions
 import com.yalta.utils.ViewUtils.grantedLocationPermission
 import com.yalta.viewModel.MapViewModel
@@ -30,6 +33,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mapView: MapView
 
     private var markers: MutableList<MarkerOptions> = mutableListOf()
+    private var bounds: LatLngBounds? = null
     private var map: GoogleMap? = null
 
     override fun onCreateView(
@@ -55,6 +59,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding.viewModel = viewModel
         binding.viewModel?.points?.observe(viewLifecycleOwner, { points ->
             markers = points.convertToMarkerOptions()
+            bounds = points.convertToBounds()
             mapView.getMapAsync(this)
         })
 
@@ -90,6 +95,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         map = googleMap
         for (marker in markers) {
             map?.addMarker(marker)
+        }
+        googleMap.setOnMapLoadedCallback {
+            if (bounds != null) {
+                map?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
+            }
         }
         if (grantedLocationPermission()) {
             viewModel.locationPermissionsGranted.value = true

@@ -29,18 +29,23 @@ class DriverRoutesViewModel @Inject constructor(
     val toDate = MutableLiveData<DateTime>()
     val showDatesError = MutableLiveData(false)
 
+    private val timezone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Moscow"))
+
     init {
         storage.routes.observeForever { routes ->
             if (routes.isEmpty()) {
                 selectedRouteChanged(selectedRoute)
             }
         }
+        getSelectedRoutes(
+            DateTime.now(timezone).withHourOfDay(0).withMinuteOfHour(0),
+            DateTime.now(timezone).plusDays(7).withHourOfDay(23).withMinuteOfHour(59)
+        )
     }
 
     fun getSomeRoutes() {
         var from = fromDate.value
         var to = toDate.value
-        val timezone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Moscow"))
 
         from = from ?: DateTime.now(timezone)
         from = from!!.withHourOfDay(0).withMinuteOfHour(0)
@@ -60,7 +65,7 @@ class DriverRoutesViewModel @Inject constructor(
     private fun getSelectedRoutes(from: DateTime, to: DateTime) = viewModelScope.launch(dispatcher) {
         val result = routesService.getRoutes(from.toString(), to.toString())
         if (result.isPresent) {
-            setRoutes(result.get())
+            setRoutes(result.get().reversed())
         }
     }
 
