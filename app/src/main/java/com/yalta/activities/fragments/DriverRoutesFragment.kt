@@ -15,6 +15,7 @@ import com.yalta.R
 import com.yalta.databinding.FragmentDriverRoutesBinding
 import com.yalta.di.YaltaApplication
 import com.yalta.viewModel.DriverRoutesViewModel
+import common.Route
 import kotlinx.android.synthetic.main.fragment_driver_routes.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
@@ -46,7 +47,6 @@ class DriverRoutesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         selectRangeButton.setOnClickListener {
-            viewModel.showDatesError(false)
             val timeZone = DateTimeZone.forID("Europe/Moscow")
             val picker = MaterialDatePicker.Builder
                 .dateRangePicker()
@@ -63,9 +63,11 @@ class DriverRoutesFragment : Fragment() {
 
         viewModel.storage.routes.observeForever { routes ->
             routesSpinner.adapter =
-                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, routes.map { route ->
-                    "ID: ${route.id} Date: ${route.routeDate.toString(DateTimeFormat.forPattern("dd-MM-yy"))}"
-                })
+                ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_list_item_1,
+                    routes.map(::getRouteSpinnerDescription)
+                )
             val selection = viewModel.selectedRoute
             if (selection != null && selection < viewModel.storage.routes.value?.size!!) {
                 routesSpinner.setSelection(selection)
@@ -81,5 +83,15 @@ class DriverRoutesFragment : Fragment() {
                 viewModel.selectedRouteChanged(null)
             }
         }
+    }
+
+    private fun getRouteSpinnerDescription(route: Route): String {
+        val builder = StringBuilder()
+            .append("ID: ${route.id} ")
+            .append("Date: ${route.routeDate.toString(DateTimeFormat.forPattern("dd-MM-yy"))}")
+        if (viewModel.isRouteDateNow(route)) {
+            builder.append(" [✓] ")
+        }
+        return builder.toString()
     }
 }
