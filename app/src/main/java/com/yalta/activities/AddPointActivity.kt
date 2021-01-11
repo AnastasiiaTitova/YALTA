@@ -78,6 +78,8 @@ class AddPointActivity : AppCompatActivity() {
                 permissions[1] == Manifest.permission.ACCESS_COARSE_LOCATION
             ) {
                 viewModel.setCurrentLocation()
+            } else {
+                viewModel.isCurrentPositionEnabled.value = false
             }
         }
     }
