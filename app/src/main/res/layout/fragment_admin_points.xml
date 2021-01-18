@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.yalta.viewModel.AdminPointsViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activities.fragments.AdminPointsFragment">
+
+        <TextView
+            android:id="@+id/pointsHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/points"
+            android:textSize="20sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
+            app:layout_constraintRight_toLeftOf="@id/guidelineRight"
+            app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalTop" />
+
+        <EditText
+            android:id="@+id/pointSearchField"
+            android:importantForAutofill="no"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:focusedByDefault="false"
+            android:hint="@string/search"
+            android:inputType="text"
+            android:maxLines="1"
+            android:text="@={viewModel.search}"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
+            app:layout_constraintRight_toLeftOf="@id/guidelineRight"
+            app:layout_constraintTop_toBottomOf="@id/pointsHeader" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
+            app:layout_constraintRight_toLeftOf="@id/guidelineRight"
+            app:layout_constraintTop_toBottomOf="@id/pointSearchField">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="0dp"
+                app:items="@{viewModel.points}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constrainedWidth="true"
+                app:layout_constrainedHeight="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
+                app:layout_constraintRight_toLeftOf="@id/guidelineRight"
+                app:layout_constraintTop_toBottomOf="@id/pointSearchField"
+                app:layout_constraintVertical_bias="0.0"
+                tools:listitem="@layout/point_details" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineHorizontalTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingAddPointButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:contentDescription="@string/create_point"
+            android:src="@drawable/ic_add"
+            android:tooltipText="@string/create_new_point"
+            app:backgroundTint="@android:color/holo_red_light"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

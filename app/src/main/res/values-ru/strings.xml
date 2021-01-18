@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">YALTA</string>
+    <string name="login">Вход</string>
+    <string name="go">Вход!</string>
+    <string name="password">Пароль</string>
+    <string name="username">Имя</string>
+    <string name="incorrect_username_or_password">Неправильное имя или пароль</string>
+    <string name="logout">Выход</string>
+    <string name="map">Карта</string>
+    <string name="profile">Профиль</string>
+    <string name="routes">Маршруты</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="enter_new_password">Введите новый пароль</string>
+    <string name="repeat_new_password">Повторите новый пароль</string>
+    <string name="ok">OK</string>
+    <string name="close">Закрыть</string>
+    <string name="passwords_differ">Пароли отличаются!</string>
+    <string name="connection_failed">Соединение прервано</string>
+    <string name="permissions_request">Пожалуйста, добавьте разрешение местоположения и перезапустите приложение</string>
+    <string name="points">Точки</string>
+    <string name="search">Поиск</string>
+    <string name="create_new_point">Создать новую точку</string>
+    <string name="name">Название</string>
+    <string name="latitude">Широта</string>
+    <string name="longitude">Долгота</string>
+    <string name="create_point">Создать точку</string>
+    <string name="set_current_location">Текущая локация</string>
+    <string name="fields_can_not_be_empty">Поля не могут быть пустыми</string>
+    <string name="current_route_marker">Данный маршрут исполняется</string>
+    <string name="select_date_range_for_routes">Выберите интервал дат для маршрутов</string>
+    <string name="point_state">Состояние точки</string>
+    <string name="formatted_username">Имя: %s</string>
+    <string name="formatted_role">Роль: %s</string>
+    <string name="update_point">Изменить точку</string>
+</resources>

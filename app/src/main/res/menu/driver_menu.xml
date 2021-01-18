@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/routes"
+        android:title="@string/routes"
+        android:icon="@android:drawable/ic_menu_directions"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/map"
+        android:title="@string/map"
+        android:icon="@android:drawable/ic_dialog_map"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/profile"
+        android:title="@string/profile"
+        android:icon="@android:drawable/ic_menu_agenda"
+        app:showAsAction="always" />
+
+</menu>
